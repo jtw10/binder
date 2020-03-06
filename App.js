@@ -5,6 +5,7 @@ import { createStackNavigator } from "react-navigation-stack";
 
 import HomeScreen from "./components/HomeScreen";
 import LoginScreen from "./components/LoginScreen";
+import RegisterScreen from "./components/RegisterScreen";
 
 const RootStack = createStackNavigator(
   {
@@ -13,6 +14,9 @@ const RootStack = createStackNavigator(
     },
     Login: {
       screen: LoginScreen
+    },
+    Register: {
+      screen: RegisterScreen
     }
   },
   {

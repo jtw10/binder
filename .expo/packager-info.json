@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://je-f9f.anonymous.binder.exp.direct",
+  "packagerNgrokUrl": "https://packager.je-f9f.anonymous.binder.exp.direct",
+  "ngrokPid": 3827,
   "packagerPort": null,
   "packagerPid": null,
   "webpackServerPort": null
