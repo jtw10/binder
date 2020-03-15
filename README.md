@@ -10,12 +10,12 @@ Binder uses location settings to determine nearby users to match with. Users wil
 
 Create a file called .env at the root folder of the project. Replace Xs with the Firebase config values.
 <br>
-API_KEY=xxxx
-AUTH_DOMAIN=xxxx
-DATABASE_URL=xxxx
-PROJECT_ID=xxxx
-MESSAGE_SENDER_ID=xxxx
-APP_ID=xxxx
+API_KEY=xxxx<br>
+AUTH_DOMAIN=xxxx<br>
+DATABASE_URL=xxxx<br>
+PROJECT_ID=xxxx<br>
+MESSAGE_SENDER_ID=xxxx<br>
+APP_ID=xxxx<br>
 
 Run `expo start` in your command line.
 
