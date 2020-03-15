@@ -7,13 +7,24 @@ import {
   TextInput,
   TouchableOpacity
 } from "react-native";
-import PropTypes from "prop-types";
+
+import Firebase from "../config/Firebase";
 
 export default class LoginScreen extends React.Component {
   state = {
     email: "",
     password: ""
   };
+
+  handleLogin = () => {
+    const { email, password } = this.state;
+
+    Firebase.auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => this.props.navigation.navigate("Profile"))
+      .catch(error => console.log(error));
+  };
+
   render() {
     const { navigation } = this.props;
 
@@ -33,7 +44,7 @@ export default class LoginScreen extends React.Component {
           placeholder="Password"
           secureTextEntry={true}
         />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         <Button
