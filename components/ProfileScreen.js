@@ -9,37 +9,14 @@ import {
 } from "react-native";
 import PropTypes from "prop-types";
 
-export default class LoginScreen extends React.Component {
-  state = {
-    email: "",
-    password: ""
-  };
+export default class ProfileScreen extends React.Component {
+  state = {};
   render() {
     const { navigation } = this.props;
 
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.inputBox}
-          value={this.state.email}
-          onChangeText={email => this.setState({ email })}
-          placeholder="Email"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.inputBox}
-          value={this.state.password}
-          onChangeText={password => this.setState({ password })}
-          placeholder="Password"
-          secureTextEntry={true}
-        />
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <Button
-          title="Don't have an account yet? Sign up"
-          onPress={() => this.props.navigation.navigate("Register")}
-        />
+        <Text>Profile Screen. Successful login!</Text>
       </View>
     );
   }
