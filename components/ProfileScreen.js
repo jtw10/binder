@@ -37,6 +37,11 @@ export default class ProfileScreen extends React.Component {
       })
       .catch(error => {
         console.log(error);
+        const defaultPic = Firebase.storage().ref("unnamed.jpg");
+        defaultPic.getDownloadURL().then(url => {
+          console.log(url);
+          this.setState({ profilePicture: url });
+        });
       });
   }
 
