@@ -4,18 +4,26 @@ import {
   View,
   Text,
   StyleSheet,
+  Image,
   TextInput,
   TouchableOpacity
 } from "react-native";
-import PropTypes from "prop-types";
+
+import FirebaseStorageUploader from "./FirebaseStorageUploader";
 
 export default class ProfileScreen extends React.Component {
-  state = {};
-  render() {
-    const { navigation } = this.props;
+  constructor() {
+    super();
+    this.state = {
+      profilePicture: ""
+    };
+  }
 
+  render() {
     return (
       <View style={styles.container}>
+        <FirebaseStorageUploader />
+        <Image source={{}} style={{ height: 250, width: 250 }} />
         <Text>Profile Screen. Successful login!</Text>
       </View>
     );

@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import "@firebase/firestore";
+import "@firebase/storage";
 
 import {
   API_KEY,
@@ -15,7 +16,7 @@ var firebaseConfig = {
   authDomain: AUTH_DOMAIN,
   databaseURL: DATABASE_URL,
   projectId: PROJECT_ID,
-  storageBucket: "",
+  storageBucket: "binderatbcit.appspot.com",
   messagingSenderId: MESSAGE_SENDER_ID,
   appId: APP_ID
 };
