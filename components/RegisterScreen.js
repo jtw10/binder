@@ -13,15 +13,23 @@ export default class RegisterScreen extends React.Component {
   state = {
     name: "",
     email: "",
-    password: ""
+    password: "",
+    location: ""
   };
 
   handleSignUp = () => {
-    const { email, password } = this.state;
+    const { email, password, name } = this.state;
+
     Firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => this.props.navigation.navigate("Profile"))
       .catch(error => console.log(error));
+
+    let newData = { name: name, email: email };
+    Firebase.firestore()
+      .collection("users")
+      .doc(email)
+      .set(newData);
   };
 
   render() {
