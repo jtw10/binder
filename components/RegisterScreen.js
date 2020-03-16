@@ -14,18 +14,54 @@ export default class RegisterScreen extends React.Component {
     name: "",
     email: "",
     password: "",
-    location: ""
+    locationCoordinates: ""
   };
 
+  _getLocationPermissions = async () => {
+    let { status } = await Permissions.getAsync(Permissions.LOCATION);
+    if (status !== "granted") {
+      this.setState({ locationPermission: false });
+    } else {
+      this.setState({ locationPermission: true });
+    }
+  };
+
+  componentDidMount() {
+    this._getLocationPermissions();
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        console.log(position.coords);
+        console.log(
+          "My position: " +
+            position.coords.latitude +
+            ", " +
+            position.coords.longitude
+        );
+        let coordinates =
+          position.coords.latitude + ", " + position.coords.longitude;
+
+        this.setState({
+          locationCoordinates: coordinates
+        });
+      },
+      error => alert(JSON.stringify(error))
+    );
+  }
+
   handleSignUp = () => {
-    const { email, password, name } = this.state;
+    const { email, password, name, locationCoordinates } = this.state;
 
     Firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => this.props.navigation.navigate("Profile"))
       .catch(error => console.log(error));
 
-    let newData = { name: name, email: email };
+    let newData = {
+      name: name,
+      email: email,
+      locationCoordinates: locationCoordinates
+    };
     Firebase.firestore()
       .collection("users")
       .doc(email)
@@ -33,8 +69,6 @@ export default class RegisterScreen extends React.Component {
   };
 
   render() {
-    const { navigation } = this.props;
-
     return (
       <View style={styles.container}>
         <TextInput

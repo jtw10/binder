@@ -13,21 +13,60 @@ import Firebase from "../config/Firebase";
 export default class LoginScreen extends React.Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    locationCoordinates: ""
   };
 
+  _getLocationPermissions = async () => {
+    let { status } = await Permissions.getAsync(Permissions.LOCATION);
+    if (status !== "granted") {
+      this.setState({ locationPermission: false });
+    } else {
+      this.setState({ locationPermission: true });
+    }
+  };
+
+  componentDidMount() {
+    this._getLocationPermissions();
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        console.log(position.coords);
+        console.log(
+          "My position: " +
+            position.coords.latitude +
+            ", " +
+            position.coords.longitude
+        );
+        let coordinates =
+          position.coords.latitude + ", " + position.coords.longitude;
+
+        this.setState({
+          locationCoordinates: coordinates
+        });
+      },
+      error => alert(JSON.stringify(error))
+    );
+  }
+
   handleLogin = () => {
-    const { email, password } = this.state;
+    const { email, password, locationCoordinates } = this.state;
 
     Firebase.auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => this.props.navigation.navigate("Profile"))
       .catch(error => console.log(error));
+
+    let updatedLocation = {
+      locationCoordinates: locationCoordinates
+    };
+    Firebase.firestore()
+      .collection("users")
+      .doc(email)
+      .update(updatedLocation);
   };
 
   render() {
-    const { navigation } = this.props;
-
     return (
       <View style={styles.container}>
         <TextInput
