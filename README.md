@@ -16,6 +16,7 @@ DATABASE_URL=xxxx<br>
 PROJECT_ID=xxxx<br>
 MESSAGE_SENDER_ID=xxxx<br>
 APP_ID=xxxx<br>
+STORAGE_BUCKET=xxxx<br>
 
 Run `expo start` in your command line.
 
