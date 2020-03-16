@@ -8,7 +8,8 @@ import {
   DATABASE_URL,
   PROJECT_ID,
   MESSAGE_SENDER_ID,
-  APP_ID
+  APP_ID,
+  STORAGE_BUCKET
 } from "react-native-dotenv";
 
 var firebaseConfig = {
@@ -16,7 +17,7 @@ var firebaseConfig = {
   authDomain: AUTH_DOMAIN,
   databaseURL: DATABASE_URL,
   projectId: PROJECT_ID,
-  storageBucket: "binderatbcit.appspot.com",
+  storageBucket: STORAGE_BUCKET,
   messagingSenderId: MESSAGE_SENDER_ID,
   appId: APP_ID
 };
