@@ -77,7 +77,7 @@ export default class FirebaseStorageUploader extends React.Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.button} onPress={this.handleOnPress}>
-          <Text>Choose Photo</Text>
+          <Text>Upload Photo</Text>
         </TouchableOpacity>
       </View>
     );
