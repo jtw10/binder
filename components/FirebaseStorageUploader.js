@@ -7,12 +7,17 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Firebase from "../config/Firebase";
 
-var user = Firebase.auth().currentUser;
-
 export default class FirebaseStorageUploader extends React.Component {
-  handleOnPress = () => {
-    console.log("button pessed");
+  state = {
+    user: {}
+  };
 
+  componentDidMount() {
+    user = Firebase.auth().currentUser;
+    this.setState({ user: user });
+  }
+
+  handleOnPress = () => {
     ImagePicker.launchImageLibraryAsync({
       mediaTypes: "Images"
     })
@@ -50,11 +55,11 @@ export default class FirebaseStorageUploader extends React.Component {
 
   uploadToFirebase = blob => {
     return new Promise((resolve, reject) => {
-      console.log(user.email);
+      console.log(this.state.user.email);
 
       var storageRef = Firebase.storage().ref();
       storageRef
-        .child("profilePictures/" + user.email + ".jpg")
+        .child("profilePictures/" + this.state.user.email + ".jpg")
         .put(blob, {
           contentType: "image/jpeg"
         })
