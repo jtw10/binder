@@ -18,8 +18,11 @@ export default class ProfileScreen extends React.Component {
     super();
     this.state = {
       user: {},
-      profilePicture: ""
+      profilePicture: "",
+      description: ""
     };
+    this.userChanges = this.userChanges.bind(this);
+    this.updateProfileDescription = this.updateProfileDescription.bind(this);
   }
 
   componentDidMount() {
@@ -45,18 +48,40 @@ export default class ProfileScreen extends React.Component {
       });
   }
 
+  updateProfileDescription() {
+    var description = this.state.description;
+    let updatedDescription = {
+      description: description
+    };
+    Firebase.firestore()
+      .collection("users")
+      .doc(user.email)
+      .update(updatedDescription);
+  }
+
+  userChanges = userInput => {
+    this.setState({ description: userInput });
+  };
+
   render() {
     return (
       <View style={styles.container}>
+        <Text>{this.state.user.name}</Text>
         <Image
           source={{ uri: this.state.profilePicture }}
           style={{ height: 250, width: 250 }}
         />
-        <Text>
+        <TextInput onChangeText={this.userChanges}>
           User information goes here. Eg. My name is Jim Bob and I am a compsci
           genius. Let's study together!
-        </Text>
+        </TextInput>
         <FirebaseStorageUploader />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.updateProfileDescription()}
+        >
+          <Text>Update Profile</Text>
+        </TouchableOpacity>
       </View>
     );
   }

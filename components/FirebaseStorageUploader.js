@@ -86,10 +86,22 @@ export default class FirebaseStorageUploader extends React.Component {
 
 const styles = StyleSheet.create({
   button: {
-    padding: 10,
+    marginTop: 30,
+    marginBottom: 20,
+    paddingVertical: 5,
+    alignItems: "center",
+    backgroundColor: "#F6820D",
+    borderColor: "#F6820D",
     borderWidth: 1,
-    borderColor: "#333",
-    textAlign: "center",
-    maxWidth: 150
+    borderRadius: 5,
+    width: 200
+  },
+  buttonText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff"
+  },
+  buttonSignup: {
+    fontSize: 12
   }
 });
