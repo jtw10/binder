@@ -18,8 +18,10 @@ export default class ProfileScreen extends React.Component {
     super();
     this.state = {
       user: {},
+      userInfo: {},
       profilePicture: "",
-      description: ""
+      description: "",
+      userDescription: ""
     };
     this.userChanges = this.userChanges.bind(this);
     this.updateProfileDescription = this.updateProfileDescription.bind(this);
@@ -27,7 +29,23 @@ export default class ProfileScreen extends React.Component {
 
   componentDidMount() {
     user = Firebase.auth().currentUser;
-    this.setState({ user: user });
+    let userRef = Firebase.firestore()
+      .collection("users")
+      .doc(user.email);
+    let userInfo = userRef
+      .get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log("No user");
+        } else {
+          this.setState({ userInfo: doc.data() });
+        }
+      })
+      .catch(error => {
+        console.log("Error getting document", error);
+      });
+
+    this.setState({ user: user, userInfo: userInfo });
 
     const ref = Firebase.storage().ref(
       "profilePictures/" + user.email + ".jpg"
@@ -66,16 +84,19 @@ export default class ProfileScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>{this.state.user.name}</Text>
+        <Text>{this.state.userInfo.name}</Text>
         <Image
           source={{ uri: this.state.profilePicture }}
           style={{ height: 250, width: 250 }}
         />
+        <FirebaseStorageUploader />
+
         <TextInput
           onChangeText={this.userChanges}
           placeholder="Write about yourself here!"
-        ></TextInput>
-        <FirebaseStorageUploader />
+        >
+          {this.state.userInfo.description}
+        </TextInput>
         <TouchableOpacity
           style={styles.button}
           onPress={() => this.updateProfileDescription()}

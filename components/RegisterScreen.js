@@ -54,18 +54,19 @@ export default class RegisterScreen extends React.Component {
 
     Firebase.auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("Profile"))
+      .then(() => {
+        let newData = {
+          name: name,
+          email: email,
+          locationCoordinates: locationCoordinates
+        };
+        Firebase.firestore()
+          .collection("users")
+          .doc(email)
+          .set(newData);
+        this.props.navigation.navigate("Profile");
+      })
       .catch(error => console.log(error));
-
-    let newData = {
-      name: name,
-      email: email,
-      locationCoordinates: locationCoordinates
-    };
-    Firebase.firestore()
-      .collection("users")
-      .doc(email)
-      .set(newData);
   };
 
   render() {
