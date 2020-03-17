@@ -71,10 +71,10 @@ export default class ProfileScreen extends React.Component {
           source={{ uri: this.state.profilePicture }}
           style={{ height: 250, width: 250 }}
         />
-        <TextInput onChangeText={this.userChanges}>
-          User information goes here. Eg. My name is Jim Bob and I am a compsci
-          genius. Let's study together!
-        </TextInput>
+        <TextInput
+          onChangeText={this.userChanges}
+          placeholder="Write about yourself here!"
+        ></TextInput>
         <FirebaseStorageUploader />
         <TouchableOpacity
           style={styles.button}
