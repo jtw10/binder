@@ -81,6 +81,11 @@ export default class ProfileScreen extends React.Component {
     this.setState({ description: userInput });
   };
 
+  logout() {
+    Firebase.auth().signOut();
+    this.props.navigation.navigate("Login");
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -103,6 +108,7 @@ export default class ProfileScreen extends React.Component {
         >
           <Text>Update Profile</Text>
         </TouchableOpacity>
+        <Button title="← Logout" onPress={() => this.logout()} />
       </View>
     );
   }
