@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Button
 } from "react-native";
 
 import Firebase from "../config/Firebase";
@@ -95,6 +96,10 @@ export default class RegisterScreen extends React.Component {
         <TouchableOpacity style={styles.button} onPress={this.handleSignUp}>
           <Text style={styles.buttonText}>Signup</Text>
         </TouchableOpacity>
+        <Button
+          title="← Back to Login"
+          onPress={() => this.props.navigation.navigate("Login")}
+        />
       </View>
     );
   }
