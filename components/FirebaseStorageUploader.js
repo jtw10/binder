@@ -77,7 +77,7 @@ export default class FirebaseStorageUploader extends React.Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.button} onPress={this.handleOnPress}>
-          <Text>Upload Photo</Text>
+          <Text style={styles.buttonText}>Upload Photo</Text>
         </TouchableOpacity>
       </View>
     );
@@ -100,8 +100,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#fff"
-  },
-  buttonSignup: {
-    fontSize: 12
   }
 });
