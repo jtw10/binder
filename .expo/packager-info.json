@@ -3,8 +3,8 @@
   "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://je-f9f.anonymous.binder.exp.direct",
   "packagerNgrokUrl": "https://packager.je-f9f.anonymous.binder.exp.direct",
-  "ngrokPid": 53927,
+  "ngrokPid": 59568,
   "packagerPort": 19001,
-  "packagerPid": 53911,
+  "packagerPid": 59545,
   "webpackServerPort": null
 }
