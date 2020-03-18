@@ -14,8 +14,8 @@ import FirebaseStorageUploader from "./FirebaseStorageUploader";
 import Firebase from "../config/Firebase";
 
 export default class ProfileScreen extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       user: {},
       userInfo: {},
@@ -87,6 +87,8 @@ export default class ProfileScreen extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <View style={styles.container}>
         <Text>{this.state.userInfo.name}</Text>
@@ -106,9 +108,21 @@ export default class ProfileScreen extends React.Component {
           style={styles.button}
           onPress={() => this.updateProfileDescription()}
         >
-          <Text>Update Profile</Text>
+          <Text style={styles.buttonText}>Update Profile</Text>
         </TouchableOpacity>
         <Button title="← Logout" onPress={() => this.logout()} />
+        <Button
+          title="Match"
+          onPress={() => this.props.navigation.navigate("Match")}
+        />
+        <Button
+          title="Chat"
+          onPress={() => this.props.navigation.navigate("Chat")}
+        />
+        <Button
+          title="Profile"
+          onPress={() => this.props.navigation.navigate("Profile")}
+        />
       </View>
     );
   }
