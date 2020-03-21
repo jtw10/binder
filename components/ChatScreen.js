@@ -20,6 +20,27 @@ export default class ProfileScreen extends React.Component {
     };
   }
 
+  componentDidMount() {
+    user = Firebase.auth().currentUser;
+    let userRef = Firebase.firestore()
+      .collection("users")
+      .doc(user.email);
+    let userInfo = userRef
+      .get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log("No user");
+        } else {
+          this.setState({ userInfo: doc.data() });
+        }
+      })
+      .catch(error => {
+        console.log("Error getting document", error);
+      });
+
+    this.setState({ user: user, userInfo: userInfo });
+  }
+
   render() {
     return (
       <View style={styles.container}>
