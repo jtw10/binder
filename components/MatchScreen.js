@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import Firebase from "../config/Firebase";
+import CardStack from "./CardComponent";
 
 export default class ProfileScreen extends React.Component {
   constructor(props) {
@@ -49,6 +50,7 @@ export default class ProfileScreen extends React.Component {
         <Text>
           Hi {this.state.userInfo.name}, this is where you match with people
         </Text>
+        <CardStack />
         <Button
           title="Match"
           onPress={() => this.props.navigation.navigate("Match")}
