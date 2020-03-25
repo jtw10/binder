@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity
 } from "react-native";
+import * as Permissions from "expo-permissions";
 
 import Firebase from "../config/Firebase";
 
