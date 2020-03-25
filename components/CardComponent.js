@@ -1,10 +1,11 @@
-// SwipeCards.js
 "use strict";
 
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Button } from "react-native";
 
 import SwipeCards from "react-native-swipe-cards";
+
+import Firebase from "../config/Firebase";
 
 class Card extends React.Component {
   constructor(props) {
@@ -13,10 +14,21 @@ class Card extends React.Component {
 
   render() {
     return (
-      <View
-        style={[styles.card, { backgroundColor: this.props.backgroundColor }]}
-      >
-        <Text>{this.props.text}</Text>
+      <View>
+        <View style={styles.card}>
+          <Image
+            style={styles.card}
+            source={{
+              uri:
+                "https://pbs.twimg.com/profile_images/711687178921717760/DLSZLtLQ_400x400.jpg"
+            }}
+          />
+        </View>
+        <Text style={styles.nameStyle}>{this.props.name}</Text>
+        <Text>
+          {this.props.distance}km away{"\n"}
+        </Text>
+        <Text>{this.props.description}</Text>
       </View>
     );
   }
@@ -30,7 +42,7 @@ class NoMoreCards extends Component {
   render() {
     return (
       <View>
-        <Text style={styles.noMoreCardsText}>No more cards</Text>
+        <Text style={styles.noMoreCardsText}>Nobody new to match with :(</Text>
       </View>
     );
   }
@@ -41,28 +53,49 @@ export default class CardStack extends React.Component {
     super(props);
     this.state = {
       cards: [
-        { text: "Tomato", backgroundColor: "red" },
-        { text: "Aubergine", backgroundColor: "purple" },
-        { text: "Courgette", backgroundColor: "green" },
-        { text: "Blueberry", backgroundColor: "blue" },
-        { text: "Umm...", backgroundColor: "cyan" },
-        { text: "orange", backgroundColor: "orange" }
+        { name: "Tomato", distance: "10 km", imageSource: "red" },
+        { name: "Aubergine", distance: "10 km", imageSource: "purple" },
+        { name: "Courgette", distance: "10 km", imageSource: "green" },
+        { name: "Blueberry", distance: "10 km", imageSource: "blue" },
+        { name: "Umm...", distance: "10 km", imageSource: "cyan" },
+        { name: "orange", distance: "10 km", imageSource: "orange" }
       ]
     };
   }
 
+  componentDidMount() {
+    console.log("swipecard mounted");
+
+    let userlist = [];
+    let userRef = Firebase.firestore().collection("users");
+    let allUsers = userRef
+      .get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.id, "=>", doc.data());
+          let tempUser = {
+            email: doc.data().email,
+            name: doc.data().name,
+            // TODO: calculate distance & get user image & check if previously matched
+            locationCoordinates: doc.data().locationCoordinates,
+            description: doc.data().description
+          };
+          userlist.push(tempUser);
+        });
+        this.setState({ cards: userlist });
+      })
+      .catch(error => {
+        console.log("Error", error);
+      });
+  }
+
   handleYup(card) {
-    console.log(`Yup for ${card.text}`);
+    console.log(`Yup for ${card.name}`);
   }
   handleNope(card) {
-    console.log(`Nope for ${card.text}`);
-  }
-  handleMaybe(card) {
-    console.log(`Maybe for ${card.text}`);
+    console.log(`Nope for ${card.name}`);
   }
   render() {
-    // If you want a stack of cards instead of one-per-one view, activate stack mode
-    // stack={true}
     return (
       <SwipeCards
         cards={this.state.cards}
@@ -70,8 +103,6 @@ export default class CardStack extends React.Component {
         renderNoMoreCards={() => <NoMoreCards />}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
-        handleMaybe={this.handleMaybe}
-        hasMaybeAction
       />
     );
   }
@@ -83,6 +114,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 300,
     height: 300
+  },
+  nameStyle: {
+    fontSize: 28
   },
   noMoreCardsText: {
     fontSize: 22
