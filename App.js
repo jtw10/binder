@@ -19,6 +19,8 @@ if (!global.atob) {
   global.atob = decode;
 }
 
+console.disableYellowBox = true;
+
 const SwitchNavigator = createSwitchNavigator(
   {
     Home: {
