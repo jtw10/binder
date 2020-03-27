@@ -7,6 +7,8 @@ import SwipeCards from "react-native-swipe-cards";
 
 import Firebase from "../config/Firebase";
 
+import * as geolib from "geolib";
+
 class Card extends React.Component {
   constructor(props) {
     super(props);
@@ -59,25 +61,80 @@ export default class CardStack extends React.Component {
         { name: "Blueberry", distance: "10 km", imageSource: "blue" },
         { name: "Umm...", distance: "10 km", imageSource: "cyan" },
         { name: "orange", distance: "10 km", imageSource: "orange" }
-      ]
+      ],
+      user: {},
+      userInfo: {},
+      currentUserLat: "",
+      currentUserLon: ""
     };
   }
 
   componentDidMount() {
     console.log("swipecard mounted");
 
+    user = Firebase.auth().currentUser;
+    let currentUserRef = Firebase.firestore()
+      .collection("users")
+      .doc(user.email);
+    let userInfo = currentUserRef
+      .get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log("No user");
+        } else {
+          this.setState({ userInfo: doc.data() });
+
+          let currentUserLocation = this.state.userInfo.locationCoordinates;
+          let currentUserLocationSplit = currentUserLocation.split(",");
+          let currentUserLat = currentUserLocationSplit[0];
+          let currentUserLon = currentUserLocationSplit[1];
+
+          this.setState({
+            currentUserLat: currentUserLat,
+            currentUserLon: currentUserLon
+          });
+        }
+      })
+      .catch(error => {
+        console.log("Error getting document", error);
+      });
+
+    this.setState({ user: user, userInfo: userInfo });
+
     let userlist = [];
     let userRef = Firebase.firestore().collection("users");
+
     let allUsers = userRef
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
           console.log(doc.id, "=>", doc.data());
+
+          let locationCoordinates = doc.data().locationCoordinates;
+          let locationSplit = locationCoordinates.split(",");
+          let targetUserLat = locationSplit[0];
+          let targetUserLon = locationSplit[1];
+
+          var targetUser = {
+            latitude: targetUserLat,
+            longitude: targetUserLon
+          };
+
+          var currentUser = {
+            latitude: this.state.currentUserLat,
+            longitude: this.state.currentUserLon
+          };
+
+          var distanceBetween =
+            geolib.getPreciseDistance(currentUser, targetUser, 1000) / 1000;
+
+          console.log(distanceBetween, "hi");
+
           let tempUser = {
             email: doc.data().email,
             name: doc.data().name,
             // TODO: calculate distance & get user image & check if previously matched
-            locationCoordinates: doc.data().locationCoordinates,
+            distance: distanceBetween,
             description: doc.data().description
           };
           userlist.push(tempUser);
@@ -87,6 +144,37 @@ export default class CardStack extends React.Component {
       .catch(error => {
         console.log("Error", error);
       });
+  }
+
+  getUserDetails() {
+    user = Firebase.auth().currentUser;
+    let userRef = Firebase.firestore()
+      .collection("users")
+      .doc(user.email);
+    let userInfo = userRef
+      .get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log("No user");
+        } else {
+          this.setState({ userInfo: doc.data() });
+        }
+      })
+      .catch(error => {
+        console.log("Error getting document", error);
+      });
+
+    this.setState({ user: user, userInfo: userInfo });
+
+    let currentUserLocation = this.state.userInfo.locationCoordinates;
+    let currentUserLocationSplit = currentUserLocation.split(",");
+    let currentUserLat = currentUserLocationSplit[0];
+    let currentUserLon = currentUserLocationSplit[1];
+
+    this.setState({
+      currentUserLat: currentUserLat,
+      currentUserLon: currentUserLon
+    });
   }
 
   handleYup(card) {
