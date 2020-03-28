@@ -14,17 +14,21 @@ import FirebaseStorageUploader from "./FirebaseStorageUploader";
 import Firebase from "../config/Firebase";
 
 export default class ProfileScreen extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
       user: {},
-      userInfo: {},
-      profilePicture: "https://miro.medium.com/max/1080/0*DqHGYPBA-ANwsma2.gif",
+      userInfo: {
+        imageSource: "https://miro.medium.com/max/1080/0*DqHGYPBA-ANwsma2.gif"
+      },
       description: "",
       userDescription: ""
     };
     this.userChanges = this.userChanges.bind(this);
     this.updateProfileDescription = this.updateProfileDescription.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
 
   componentDidMount() {
@@ -46,24 +50,6 @@ export default class ProfileScreen extends React.Component {
       });
 
     this.setState({ user: user, userInfo: userInfo });
-
-    const ref = Firebase.storage().ref(
-      "profilePictures/" + user.email + ".jpg"
-    );
-    ref
-      .getDownloadURL()
-      .then(url => {
-        console.log(url);
-        this.setState({ profilePicture: url });
-      })
-      .catch(error => {
-        console.log(error);
-        const defaultPic = Firebase.storage().ref("unnamed.jpg");
-        defaultPic.getDownloadURL().then(url => {
-          console.log(url);
-          this.setState({ profilePicture: url });
-        });
-      });
   }
 
   updateProfileDescription() {
@@ -86,16 +72,40 @@ export default class ProfileScreen extends React.Component {
     this.props.navigation.navigate("Login");
   }
 
+  refresh() {
+    user = Firebase.auth().currentUser;
+    let userRef = Firebase.firestore()
+      .collection("users")
+      .doc(user.email);
+    let userInfo = userRef
+      .get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log("No user");
+        } else {
+          this.setState({ userInfo: doc.data() });
+        }
+      })
+      .catch(error => {
+        console.log("Error getting document", error);
+      });
+
+    this.setState({ user: user, userInfo: userInfo });
+  }
+
   render() {
     const { navigation } = this.props;
-
     return (
       <View style={styles.container}>
+        <TouchableOpacity style={styles.button} onPress={() => this.refresh()}>
+          <Text style={styles.buttonText}>Refresh Profile</Text>
+        </TouchableOpacity>
         <Text>{this.state.userInfo.name}</Text>
         <Image
-          source={{ uri: this.state.profilePicture }}
+          source={{ uri: this.state.userInfo.imageSource }}
           style={{ height: 250, width: 250 }}
         />
+
         <FirebaseStorageUploader />
 
         <TextInput
