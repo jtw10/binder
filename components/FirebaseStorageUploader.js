@@ -9,10 +9,13 @@ import Firebase from "../config/Firebase";
 
 export default class FirebaseStorageUploader extends React.Component {
   state = {
-    user: {}
+    user: {},
+    isLoading: true
   };
 
   componentDidMount() {
+    this._isMounted = true;
+
     user = Firebase.auth().currentUser;
     this.setState({ user: user });
   }
@@ -37,6 +40,10 @@ export default class FirebaseStorageUploader extends React.Component {
         throw error;
       });
   };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   uriToBlob = uri => {
     return new Promise((resolve, reject) => {
@@ -67,6 +74,24 @@ export default class FirebaseStorageUploader extends React.Component {
           blob.close();
           resolve(snapshot);
         })
+        .then(
+          (updateUserImageSource = () => {
+            console.log("i got here LMAO");
+            Firebase.storage()
+              .ref("profilePictures/" + this.state.user.email + ".jpg")
+              .getDownloadURL()
+              .then(url => {
+                console.log(url);
+                let updatedImageUrl = {
+                  imageSource: url
+                };
+                Firebase.firestore()
+                  .collection("users")
+                  .doc(this.state.user.email)
+                  .update(updatedImageUrl);
+              });
+          })
+        )
         .catch(error => {
           reject(error);
         });
