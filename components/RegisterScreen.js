@@ -11,12 +11,16 @@ import * as Permissions from "expo-permissions";
 
 import Firebase from "../config/Firebase";
 
+const defaultImage =
+  "https://firebasestorage.googleapis.com/v0/b/binderatbcit.appspot.com/o/default_profile.jpg?alt=media&token=1dd61c65-f633-4469-a7fc-73d4142c4fc7";
+
 export default class RegisterScreen extends React.Component {
   state = {
     name: "",
     email: "",
     password: "",
-    locationCoordinates: ""
+    locationCoordinates: "",
+    imageSource: ""
   };
 
   _getLocationPermissions = async () => {
@@ -60,7 +64,8 @@ export default class RegisterScreen extends React.Component {
         let newData = {
           name: name,
           email: email,
-          locationCoordinates: locationCoordinates
+          locationCoordinates: locationCoordinates,
+          imageSource: defaultImage
         };
         Firebase.firestore()
           .collection("users")
