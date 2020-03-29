@@ -65,8 +65,12 @@ export default class RegisterScreen extends React.Component {
           name: name,
           email: email,
           locationCoordinates: locationCoordinates,
-          imageSource: defaultImage
+          imageSource: defaultImage,
+          swipedAlready: [],
+          swipedYes: []
         };
+        newData.swipedAlready.push(email);
+        console.log("DATA BEING WRITTEN: ", newData);
         Firebase.firestore()
           .collection("users")
           .doc(email)
