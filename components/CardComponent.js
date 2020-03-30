@@ -6,6 +6,8 @@ import { StyleSheet, Text, View, Image, Button } from "react-native";
 import SwipeCards from "react-native-swipe-cards";
 
 import Firebase from "../config/Firebase";
+import firebase from "firebase/app";
+import "firebase/firestore";
 
 import * as geolib from "geolib";
 
@@ -21,8 +23,7 @@ class Card extends React.Component {
           <Image
             style={styles.card}
             source={{
-              uri:
-                "https://pbs.twimg.com/profile_images/711687178921717760/DLSZLtLQ_400x400.jpg"
+              uri: `${this.props.imageSource}`
             }}
           />
         </View>
@@ -55,12 +56,12 @@ export default class CardStack extends React.Component {
     super(props);
     this.state = {
       cards: [
-        { name: "Tomato", distance: "10 km", imageSource: "red" },
-        { name: "Aubergine", distance: "10 km", imageSource: "purple" },
-        { name: "Courgette", distance: "10 km", imageSource: "green" },
-        { name: "Blueberry", distance: "10 km", imageSource: "blue" },
-        { name: "Umm...", distance: "10 km", imageSource: "cyan" },
-        { name: "orange", distance: "10 km", imageSource: "orange" }
+        { name: "Tomato", distance: "10", imageSource: "red" },
+        { name: "Aubergine", distance: "10", imageSource: "purple" },
+        { name: "Courgette", distance: "10", imageSource: "green" },
+        { name: "Blueberry", distance: "10", imageSource: "blue" },
+        { name: "Umm...", distance: "10", imageSource: "cyan" },
+        { name: "orange", distance: "10", imageSource: "orange" }
       ],
       user: {},
       userInfo: {},
@@ -108,6 +109,8 @@ export default class CardStack extends React.Component {
       .get()
       .then(snapshot => {
         snapshot.forEach(doc => {
+          let userInfo = this.state.userInfo;
+
           console.log(doc.id, "=>", doc.data());
 
           let locationCoordinates = doc.data().locationCoordinates;
@@ -126,18 +129,20 @@ export default class CardStack extends React.Component {
           };
 
           var distanceBetween =
-            geolib.getPreciseDistance(currentUser, targetUser, 1000) / 1000;
-
-          console.log(distanceBetween, "hi");
+            geolib.getPreciseDistance(currentUser, targetUser, 100) / 1000;
 
           let tempUser = {
             email: doc.data().email,
             name: doc.data().name,
-            // TODO: calculate distance & get user image & check if previously matched
+            description: doc.data().description,
             distance: distanceBetween,
-            description: doc.data().description
+            imageSource: doc.data().imageSource
           };
-          userlist.push(tempUser);
+
+          var swipedAlready = userInfo.swipedAlready;
+          if (userInfo.swipedAlready.indexOf(tempUser.email) < 0) {
+            userlist.push(tempUser);
+          }
         });
         this.setState({ cards: userlist });
       })
@@ -146,43 +151,34 @@ export default class CardStack extends React.Component {
       });
   }
 
-  getUserDetails() {
-    user = Firebase.auth().currentUser;
+  handleYup(card) {
+    console.log(`Yup for ${card.name}`);
+
     let userRef = Firebase.firestore()
       .collection("users")
       .doc(user.email);
-    let userInfo = userRef
-      .get()
-      .then(doc => {
-        if (!doc.exists) {
-          console.log("No user");
-        } else {
-          this.setState({ userInfo: doc.data() });
-        }
-      })
-      .catch(error => {
-        console.log("Error getting document", error);
-      });
 
-    this.setState({ user: user, userInfo: userInfo });
+    userRef.update({
+      swipedAlready: firebase.firestore.FieldValue.arrayUnion(card.email)
+    });
 
-    let currentUserLocation = this.state.userInfo.locationCoordinates;
-    let currentUserLocationSplit = currentUserLocation.split(",");
-    let currentUserLat = currentUserLocationSplit[0];
-    let currentUserLon = currentUserLocationSplit[1];
-
-    this.setState({
-      currentUserLat: currentUserLat,
-      currentUserLon: currentUserLon
+    userRef.update({
+      swipedYes: firebase.firestore.FieldValue.arrayUnion(card.email)
     });
   }
 
-  handleYup(card) {
-    console.log(`Yup for ${card.name}`);
-  }
   handleNope(card) {
     console.log(`Nope for ${card.name}`);
+
+    let userRef = Firebase.firestore()
+      .collection("users")
+      .doc(user.email);
+
+    userRef.update({
+      swipedAlready: firebase.firestore.FieldValue.arrayUnion(card.email)
+    });
   }
+
   render() {
     return (
       <SwipeCards
@@ -191,6 +187,7 @@ export default class CardStack extends React.Component {
         renderNoMoreCards={() => <NoMoreCards />}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
+        smoothTransition={false}
       />
     );
   }
