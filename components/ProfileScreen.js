@@ -108,6 +108,7 @@ export default class ProfileScreen extends React.Component {
 
         <FirebaseStorageUploader />
 
+        <Text>Description:</Text>
         <TextInput
           onChangeText={this.userChanges}
           placeholder="Write about yourself here!"
