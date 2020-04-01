@@ -67,7 +67,8 @@ export default class RegisterScreen extends React.Component {
           locationCoordinates: locationCoordinates,
           imageSource: defaultImage,
           swipedAlready: [],
-          swipedYes: []
+          swipedYes: [],
+          searchDistance: 50
         };
         newData.swipedAlready.push(email);
         console.log("DATA BEING WRITTEN: ", newData);

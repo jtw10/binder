@@ -47,9 +47,6 @@ export default class ProfileScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text>
-          Hi {this.state.userInfo.name}, this is where you match with people
-        </Text>
         <CardStack />
         <Button
           title="Match"

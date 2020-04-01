@@ -1,7 +1,7 @@
 "use strict";
 
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, Button } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 
 import SwipeCards from "react-native-swipe-cards";
 
@@ -138,9 +138,11 @@ export default class CardStack extends React.Component {
             distance: distanceBetween,
             imageSource: doc.data().imageSource
           };
-
-          var swipedAlready = userInfo.swipedAlready;
-          if (userInfo.swipedAlready.indexOf(tempUser.email) < 0) {
+          console.log(tempUser.distance);
+          if (
+            userInfo.swipedAlready.indexOf(tempUser.email) < 0 &&
+            userInfo.searchDistance >= tempUser.distance
+          ) {
             userlist.push(tempUser);
           }
         });

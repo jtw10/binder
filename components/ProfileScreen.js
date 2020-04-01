@@ -85,7 +85,10 @@ export default class ProfileScreen extends React.Component {
 
   handleSearchDistanceChange = () => {
     var searchDistance = this.state.searchDistance;
-    console.log(searchDistance);
+    console.log(
+      "User search distance settings changed to:",
+      searchDistance + "km"
+    );
     let updatedSearchDistance = {
       searchDistance: searchDistance
     };
@@ -153,7 +156,7 @@ export default class ProfileScreen extends React.Component {
         <Slider
           style={{ width: 200, height: 40 }}
           value={this.state.userInfo.searchDistance}
-          minimumValue={0}
+          minimumValue={5}
           maximumValue={50}
           step={5}
           minimumTrackTintColor="#000000"
