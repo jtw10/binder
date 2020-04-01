@@ -136,7 +136,8 @@ export default class CardStack extends React.Component {
             name: doc.data().name,
             description: doc.data().description,
             distance: distanceBetween,
-            imageSource: doc.data().imageSource
+            imageSource: doc.data().imageSource,
+            swipedYes: doc.data().swipedYes
           };
           console.log(tempUser.distance);
           if (
@@ -167,6 +168,16 @@ export default class CardStack extends React.Component {
     userRef.update({
       swipedYes: firebase.firestore.FieldValue.arrayUnion(card.email)
     });
+
+    console.log(card.swipedYes);
+    if (card.swipedYes.indexOf(user.email) > -1) {
+      Alert.alert(
+        "Congratulations.",
+        "You've matched with " + `${card.name}` + "!",
+        { text: "Nice!", onPress: () => console.log("Nice!") },
+        { cancelable: false }
+      );
+    }
   }
 
   handleNope(card) {
