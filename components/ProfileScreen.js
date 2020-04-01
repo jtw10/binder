@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Image,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Slider
 } from "react-native";
 
 import FirebaseStorageUploader from "./FirebaseStorageUploader";
@@ -24,12 +25,24 @@ export default class ProfileScreen extends React.Component {
         imageSource: "https://miro.medium.com/max/1080/0*DqHGYPBA-ANwsma2.gif"
       },
       description: "",
-      userDescription: ""
+      userDescription: "",
+      searchDistance: ""
     };
     this.userChanges = this.userChanges.bind(this);
     this.updateProfileDescription = this.updateProfileDescription.bind(this);
+    this.handleSearchDistanceChange = this.handleSearchDistanceChange.bind(
+      this
+    );
     this.refresh = this.refresh.bind(this);
   }
+
+  static defaultProps = {
+    value: false,
+    sliderValue: 3,
+    min: 1,
+    max: 5,
+    step: 1
+  };
 
   componentDidMount() {
     user = Firebase.auth().currentUser;
@@ -42,7 +55,10 @@ export default class ProfileScreen extends React.Component {
         if (!doc.exists) {
           console.log("No user");
         } else {
-          this.setState({ userInfo: doc.data() });
+          this.setState({
+            userInfo: doc.data(),
+            searchDistance: doc.data().searchDistance
+          });
         }
       })
       .catch(error => {
@@ -65,6 +81,18 @@ export default class ProfileScreen extends React.Component {
 
   userChanges = userInput => {
     this.setState({ description: userInput });
+  };
+
+  handleSearchDistanceChange = () => {
+    var searchDistance = this.state.searchDistance;
+    console.log(searchDistance);
+    let updatedSearchDistance = {
+      searchDistance: searchDistance
+    };
+    Firebase.firestore()
+      .collection("users")
+      .doc(user.email)
+      .update(updatedSearchDistance);
   };
 
   logout() {
@@ -121,6 +149,18 @@ export default class ProfileScreen extends React.Component {
         >
           <Text style={styles.buttonText}>Update Profile</Text>
         </TouchableOpacity>
+        <Text>Search Distance: {this.state.searchDistance}km</Text>
+        <Slider
+          style={{ width: 200, height: 40 }}
+          value={this.state.userInfo.searchDistance}
+          minimumValue={0}
+          maximumValue={50}
+          step={5}
+          minimumTrackTintColor="#000000"
+          maximumTrackTintColor="#GGGGGG"
+          onValueChange={val => this.setState({ searchDistance: val })}
+          onSlidingComplete={this.handleSearchDistanceChange}
+        />
         <Button title="← Logout" onPress={() => this.logout()} />
         <Button
           title="Match"
