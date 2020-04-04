@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Image,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  FlatList
 } from "react-native";
 
 import Firebase from "../config/Firebase";
@@ -91,7 +92,8 @@ export default class ProfileScreen extends React.Component {
             description: doc.data().description,
             distance: distanceBetween,
             imageSource: doc.data().imageSource,
-            swipedYes: doc.data().swipedYes
+            swipedYes: doc.data().swipedYes,
+            locationCoordinates: doc.data().locationCoordinates
           };
 
           console.log(tempUser);
@@ -111,6 +113,7 @@ export default class ProfileScreen extends React.Component {
   checkMatches() {}
 
   render() {
+    var userInfo = this.state.userInfo;
     var matchedUsers = [];
     for (let i = 0; i < this.state.matchedUsers.length; i++) {
       matchedUsers.push(this.state.matchedUsers[i]);
@@ -119,7 +122,41 @@ export default class ProfileScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text>Hi {this.state.userInfo.name}, this is where you chat</Text>
+        <View style={{ padding: 50 }}>
+          <Text>
+            Hi {this.state.userInfo.name}, this is where you suggest a meeting
+            place with your matches!
+          </Text>
+        </View>
+
+        <FlatList
+          data={matchedUsers}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate("Meet Up", {
+                  matchName: item.name,
+                  matchImageSource: item.imageSource,
+                  matchDescription: item.description,
+                  matchCoordinates: item.locationCoordinates
+                })
+              }
+            >
+              <Image
+                style={styles.itemImage}
+                source={{ uri: item.imageSource }}
+              />
+              <Text style={styles.itemText}>
+                {item.name}
+                {"\n"}
+                {item.distance} km
+                {"\n"}
+                {item.description}
+              </Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.email}
+        />
 
         <Button
           title="Match"
@@ -172,5 +209,21 @@ const styles = StyleSheet.create({
   },
   buttonSignup: {
     fontSize: 12
+  },
+  itemText: {
+    backgroundColor: "#E3E4E5",
+    paddingLeft: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginTop: 0,
+    marginBottom: 0,
+    marginHorizontal: 16,
+    color: "#013670"
+  },
+  itemImage: {
+    padding: 80,
+    marginTop: 10,
+    marginBottom: 0,
+    marginHorizontal: 16
   }
 });

@@ -1,10 +1,10 @@
 {
-  "devToolsPort": 19002,
+  "devToolsPort": 19003,
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://y5-p22.anonymous.binder.exp.direct",
+  "packagerNgrokUrl": "https://packager.y5-p22.anonymous.binder.exp.direct",
+  "ngrokPid": 7868,
   "packagerPort": 19001,
-  "packagerPid": 3400,
+  "packagerPid": 7852,
   "webpackServerPort": null
 }

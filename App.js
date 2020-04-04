@@ -61,7 +61,7 @@ const StackNavigator = createStackNavigator(
         header: null
       }
     },
-    Suggestion: {
+    "Meet Up": {
       screen: SuggestionScreen
     }
   },
