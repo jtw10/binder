@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, View, StyleSheet, Image, Button, FlatList } from "react-native";
+import { GiftedChat } from "react-native-gifted-chat";
 
 import Firebase from "../config/Firebase";
 
@@ -10,7 +11,8 @@ export default class SuggestionScreen extends React.Component {
     user: {},
     userInfo: {},
     currentUserLat: "",
-    currentUserLon: ""
+    currentUserLon: "",
+    messaegs: []
   };
 
   componentDidMount() {
@@ -57,6 +59,10 @@ export default class SuggestionScreen extends React.Component {
     );
     const matchDescription = navigation.getParam(
       "matchDescription",
+      "User information unvailable"
+    );
+    const matchEmail = navigation.getParam(
+      "matchEmail",
       "User information unvailable"
     );
     const matchCoordinates = navigation.getParam(
@@ -124,11 +130,14 @@ export default class SuggestionScreen extends React.Component {
         <View style={styles.itemText}>
           <Text>User Description: </Text>
           <Text>{matchDescription}</Text>
+          <Text>User Contact: </Text>
+          <Text>{matchEmail}</Text>
         </View>
         <View style={styles.container}>
           <Text>
             Here are some suggested locations to meet up with your match.
             Suggestions are based on a central point between you and your match.
+            E-mail your match to arrange a meet up time and location!
           </Text>
           <FlatList
             data={suggestedLocations}

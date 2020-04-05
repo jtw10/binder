@@ -55,14 +55,7 @@ export default class CardStack extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cards: [
-        { name: "Tomato", distance: "10", imageSource: "red" },
-        { name: "Aubergine", distance: "10", imageSource: "purple" },
-        { name: "Courgette", distance: "10", imageSource: "green" },
-        { name: "Blueberry", distance: "10", imageSource: "blue" },
-        { name: "Umm...", distance: "10", imageSource: "cyan" },
-        { name: "orange", distance: "10", imageSource: "orange" }
-      ],
+      cards: [{ name: "", distance: "", imageSource: "red" }],
       user: {},
       userInfo: {},
       currentUserLat: "",

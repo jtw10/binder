@@ -138,7 +138,8 @@ export default class ProfileScreen extends React.Component {
                   matchName: item.name,
                   matchImageSource: item.imageSource,
                   matchDescription: item.description,
-                  matchCoordinates: item.locationCoordinates
+                  matchCoordinates: item.locationCoordinates,
+                  matchEmail: item.email
                 })
               }
             >

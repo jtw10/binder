@@ -5,7 +5,8 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import * as Permissions from "expo-permissions";
 
@@ -56,7 +57,15 @@ export default class LoginScreen extends React.Component {
     Firebase.auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => this.props.navigation.navigate("Profile"))
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        Alert.alert(
+          "Uh oh.",
+          "Looks like your e-mail or password is incorrect",
+          { text: "Try Again!", onPress: () => console.log("Try Again!") },
+          { cancelable: false }
+        );
+      });
 
     let updatedLocation = {
       locationCoordinates: locationCoordinates
