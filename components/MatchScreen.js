@@ -1,14 +1,16 @@
 import React from "react";
 import {
-  Button,
   View,
   Text,
   StyleSheet,
   Image,
   TextInput,
-  TouchableOpacity
 } from "react-native";
 
+import {Button} from "react-native-elements";
+
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Firebase from "../config/Firebase";
 import CardStack from "./CardComponent";
 
@@ -47,19 +49,52 @@ export default class ProfileScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <CardStack />
-        <Button
-          title="Match"
-          onPress={() => this.props.navigation.navigate("Match")}
-        />
-        <Button
-          title="Chat"
-          onPress={() => this.props.navigation.navigate("Chat")}
-        />
-        <Button
-          title="Profile"
-          onPress={() => this.props.navigation.navigate("Profile")}
-        />
+        <View style={styles.card}>
+         <CardStack />
+        </View>
+        <View style={styles.tabbar}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate("Match")}>
+            <Button
+              type="clear"
+              icon={
+                <Icon
+                  name="meetup"
+                  size={40}
+                  color="#44aee3"
+                />
+              }
+              buttonStyle={styles.buttonselected}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.props.navigation.navigate("Chat")}>
+            <Button
+              type="clear"
+              icon={
+                <Icon
+                  name="comments"
+                  size={40}
+                  color="#44aee3"
+                />
+              }
+              buttonStyle={styles.button}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity  onPress={() => this.props.navigation.navigate("Profile")}>
+          <Button
+            type="clear"
+            icon={
+              <Icon
+                name="user"
+                size={40}
+                color="#44aee3"
+              />
+            }
+            buttonStyle={styles.button}
+          />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -83,21 +118,35 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
-    marginBottom: 20,
-    paddingVertical: 5,
+    marginBottom: 0,
+    paddingVertical: 0,
     alignItems: "center",
-    backgroundColor: "#F6820D",
-    borderColor: "#F6820D",
-    borderWidth: 1,
-    borderRadius: 5,
-    width: 200
+    width: 115,
+    height:70,
+    borderTopColor:"#44aee3",
+    borderTopWidth:2,
+    
   },
-  buttonText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff"
+  buttonselected: {
+    marginTop: 30,
+    marginBottom: 0,
+    paddingVertical: 0,
+    alignItems: "center",
+    width: 115,
+    height:70,
+    borderTopColor:"#44aee3",
+    borderTopWidth:4
   },
-  buttonSignup: {
-    fontSize: 12
+  tabbar:{
+    flexDirection: 'row',
+    width:"90%",
+    justifyContent:"space-between",
+    position:"absolute",
+    bottom:12,
+  },
+  card:{
+    height:"78%",
+    position:'absolute',
+    bottom:88
   }
 });

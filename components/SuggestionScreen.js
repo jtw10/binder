@@ -96,7 +96,7 @@ export default class SuggestionScreen extends React.Component {
           "," +
           midpoint.longitude +
           "&radius=4000" +
-          "&type=coffee"
+          "&type=cafe"
       )
         .then(response => response.json())
         .then(responseJson => {

@@ -15,6 +15,8 @@ import * as ImagePicker from "expo-image-picker";
 
 import Firebase from "../config/Firebase";
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 export default class ProfileScreen extends React.Component {
   _isMounted = false;
 
@@ -225,13 +227,11 @@ export default class ProfileScreen extends React.Component {
         >
           {this.state.userInfo.description}
         </TextInput>
-        <TouchableOpacity
-          style={styles.button}
+        <Button
+          title="Update Profile"
+          type="outline"
           onPress={() => this.updateProfileDescription()}
-        >
-          <Text style={styles.buttonText}>Update Profile</Text>
-        </TouchableOpacity>
-
+        />
 
         <Text>Search Distance: {this.state.searchDistance}km</Text>
         <Slider
@@ -245,19 +245,63 @@ export default class ProfileScreen extends React.Component {
           onValueChange={val => this.setState({ searchDistance: val })}
           onSlidingComplete={this.handleSearchDistanceChange}
         />
-        <Button title="← Logout" onPress={() => this.logout()} />
-        <Button
-          title="Match"
-          onPress={() => this.props.navigation.navigate("Match")}
-        />
-        <Button
-          title="Chat"
-          onPress={() => this.props.navigation.navigate("Chat")}
-        />
-        <Button
-          title="Profile"
-          onPress={() => this.props.navigation.navigate("Profile")}
-        />
+        <View style={styles.logout}>
+          <Button 
+            type="clear"
+              icon={
+                <Icon
+                  name="sign-out"
+                  size={40}
+                  color="#44aee3"
+                />
+              }
+            onPress={() => this.logout()} 
+          />
+        </View>
+
+        <View style={styles.tabbar}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate("Match")}>
+            <Button
+              type="clear"
+              icon={
+                <Icon
+                  name="meetup"
+                  size={40}
+                  color="#44aee3"
+                />
+              }
+              buttonStyle={styles.button}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.props.navigation.navigate("Chat")}>
+            <Button
+              type="clear"
+              icon={
+                <Icon
+                  name="comments"
+                  size={40}
+                  color="#44aee3"
+                />
+              }
+              buttonStyle={styles.button}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity  onPress={() => this.props.navigation.navigate("Profile")}>
+          <Button
+            type="clear"
+            icon={
+              <Icon
+                name="user"
+                size={40}
+                color="#44aee3"
+              />
+            }
+            buttonStyle={styles.buttonselected}
+          />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -281,21 +325,34 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
-    marginBottom: 20,
-    paddingVertical: 5,
+    marginBottom: 0,
+    paddingVertical: 0,
     alignItems: "center",
-    backgroundColor: "#F6820D",
-    borderColor: "#F6820D",
-    borderWidth: 1,
-    borderRadius: 5,
-    width: 200
+    width: 115,
+    height:70,
+    borderTopColor:"#44aee3",
+    borderTopWidth:2
   },
-  buttonText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff"
+  buttonselected: {
+    marginTop: 30,
+    marginBottom: 0,
+    paddingVertical: 0,
+    alignItems: "center",
+    width: 115,
+    height:70,
+    borderTopColor:"#44aee3",
+    borderTopWidth:4
   },
-  buttonSignup: {
-    fontSize: 12
+  tabbar:{
+    flexDirection: 'row',
+    width:"90%",
+    justifyContent:"space-between",
+    position:"absolute",
+    bottom:12
+  },
+  logout:{
+    position:"absolute",
+    top:50,
+    right:20
   }
 });
