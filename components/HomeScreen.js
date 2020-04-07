@@ -1,6 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-import * as Animatable from 'react-native-animatable';
+import { View, StyleSheet, Image } from "react-native";
 import { Button } from 'react-native-elements';
 
 export default class HomeScreen extends React.Component {
@@ -12,19 +11,22 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View>
-          <Animatable.Image style={styles.heart} animation="rubberBand" source={require('../assets/heart.jpg')} iterationCount={10000} />
+        <View style={styles.logo}>
+          <Image source={require('../assets/logo.jpg')}/>
+         
         </View>
         <View style={styles.buttons}>
 
             <Button 
               title="Login"
+              buttonStyle={styles.button}
               type="solid"
               onPress={() => this.props.navigation.navigate("Login")}
             />
 
             <Button 
               title="Register"
+              buttonStyle={styles.button}
               type="outline"
               onPress={() => this.props.navigation.navigate("Register")}
             />
@@ -39,12 +41,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    backgroundColor:"#ffffff"
   },
-  heart: {
-    marginTop:50,
-    height:150,
-    width:150
+  logo: {
+    height:400,
+    width:380
+  },
+  button:{
+    marginTop: 30,
+    marginBottom: 20,
+    paddingVertical: 5,
+    alignItems: "center",
+    borderRadius: 5,
+    width: 120
   },
   buttons: {
     flexDirection: 'row',
