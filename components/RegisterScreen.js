@@ -5,9 +5,9 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Button
 } from "react-native";
 import * as Permissions from "expo-permissions";
+import { Button } from 'react-native-elements';
 
 import Firebase from "../config/Firebase";
 
@@ -104,11 +104,16 @@ export default class RegisterScreen extends React.Component {
           placeholder="Password"
           secureTextEntry={true}
         />
-        <TouchableOpacity style={styles.button} onPress={this.handleSignUp}>
-          <Text style={styles.buttonText}>Signup</Text>
-        </TouchableOpacity>
         <Button
-          title="← Back to Login"
+          title="Signup"
+          buttonStyle={styles.button}
+          type="solid"
+          onPress={this.handleSignUp}
+        />
+
+        <Button
+          title="← Have an account? Back to Login"
+          type="clear"
           onPress={() => this.props.navigation.navigate("Login")}
         />
       </View>
@@ -137,18 +142,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingVertical: 5,
     alignItems: "center",
-    backgroundColor: "#FFA611",
-    borderColor: "#FFA611",
-    borderWidth: 1,
     borderRadius: 5,
     width: 200
-  },
-  buttonText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff"
-  },
-  buttonSignup: {
-    fontSize: 12
   }
 });

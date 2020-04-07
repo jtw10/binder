@@ -167,7 +167,7 @@ export default class CardStack extends React.Component {
       Alert.alert(
         "Congratulations.",
         "You've matched with " + `${card.name}` + "!",
-        { text: "Nice!", onPress: () => console.log("Nice!") },
+        [{ text: "Nice!", onPress: () => console.log("Nice!") }],
         { cancelable: false }
       );
     }
