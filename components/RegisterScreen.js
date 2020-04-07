@@ -1,10 +1,9 @@
 import React from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
+  Image
 } from "react-native";
 import * as Permissions from "expo-permissions";
 import { Button } from 'react-native-elements';
@@ -84,38 +83,41 @@ export default class RegisterScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.inputBox}
-          value={this.state.name}
-          onChangeText={name => this.setState({ name })}
-          placeholder="Full Name"
-        />
-        <TextInput
-          style={styles.inputBox}
-          value={this.state.email}
-          onChangeText={email => this.setState({ email })}
-          placeholder="Email"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.inputBox}
-          value={this.state.password}
-          onChangeText={password => this.setState({ password })}
-          placeholder="Password"
-          secureTextEntry={true}
-        />
-        <Button
-          title="Signup"
-          buttonStyle={styles.button}
-          type="solid"
-          onPress={this.handleSignUp}
-        />
+        <Image style={styles.logo} source={require('../assets/logo.jpg')}/>
+        <View style={styles.content}>
+          <TextInput
+            style={styles.inputBox}
+            value={this.state.name}
+            onChangeText={name => this.setState({ name })}
+            placeholder="Full Name"
+          />
+          <TextInput
+            style={styles.inputBox}
+            value={this.state.email}
+            onChangeText={email => this.setState({ email })}
+            placeholder="Email"
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.inputBox}
+            value={this.state.password}
+            onChangeText={password => this.setState({ password })}
+            placeholder="Password"
+            secureTextEntry={true}
+          />
+          <Button
+            title="Signup"
+            buttonStyle={styles.button}
+            type="solid"
+            onPress={this.handleSignUp}
+          />
 
-        <Button
-          title="← Have an account? Back to Login"
-          type="clear"
-          onPress={() => this.props.navigation.navigate("Login")}
-        />
+          <Button
+            title="← Have an account? Back to Login"
+            type="clear"
+            onPress={() => this.props.navigation.navigate("Login")}
+          />
+        </View>
       </View>
     );
   }
@@ -144,5 +146,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     width: 200
+  },
+  logo:{
+    width:"80%",
+    height: 80,
+    top:"20%",
+    position:"absolute"
+  },
+  content:{
+    width:"100%",
+    alignItems:"center",
+    position:"absolute",
+    bottom:"20%"
   }
 });

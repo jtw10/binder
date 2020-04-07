@@ -12,7 +12,7 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.logo}>
-          <Image source={require('../assets/logo.jpg')}/>
+          <Image style={styles.logo} source={require('../assets/logo.jpg')}/>
          
         </View>
         <View style={styles.buttons}>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor:"#ffffff"
+    backgroundColor:"#fff"
   },
   logo: {
     height:400,
@@ -62,5 +62,11 @@ const styles = StyleSheet.create({
     justifyContent:"space-between",
     position:"absolute",
     bottom:40
+  },
+  logo:{
+    width:"100%",
+    height: 100,
+    top:"25%",
+    position:"absolute"
   }
 });

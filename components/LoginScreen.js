@@ -3,7 +3,8 @@ import {
   View,
   StyleSheet,
   TextInput,
-  Alert
+  Alert,
+  Image
 } from "react-native";
 import * as Permissions from "expo-permissions";
 import { Button } from 'react-native-elements';
@@ -91,32 +92,35 @@ export default class LoginScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.inputBox}
-          value={this.state.email}
-          onChangeText={email => this.setState({ email })}
-          placeholder="Email"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.inputBox}
-          value={this.state.password}
-          onChangeText={password => this.setState({ password })}
-          placeholder="Password"
-          secureTextEntry={true}
-        />
-        <Button 
-          buttonStyle={styles.button} 
-          title="Login"
-          type="solid"
-          onPress={this.handleLogin}
+        <Image style={styles.logo} source={require('../assets/logo.jpg')}/>
+        <View style={styles.content}>
+          <TextInput
+            style={styles.inputBox}
+            value={this.state.email}
+            onChangeText={email => this.setState({ email })}
+            placeholder="Email"
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.inputBox}
+            value={this.state.password}
+            onChangeText={password => this.setState({ password })}
+            placeholder="Password"
+            secureTextEntry={true}
+          />
+          <Button 
+            buttonStyle={styles.button} 
+            title="Login"
+            type="solid"
+            onPress={this.handleLogin}
 
-        />
-        <Button
-          title="Don't have an account yet? Sign up"
-          type="clear"
-          onPress={() => this.props.navigation.navigate("Register")}
-        />
+          />
+          <Button
+            title="Don't have an account yet? Sign up"
+            type="clear"
+            onPress={() => this.props.navigation.navigate("Register")}
+          />
+        </View>
       </View>
     );
   }
@@ -145,5 +149,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     width: 200
+  },
+  logo:{
+    width:"80%",
+    height: 80,
+    top:"20%",
+    position:"absolute"
+  },
+  content:{
+    width:"100%",
+    alignItems:"center",
+    position:"absolute",
+    bottom:"20%"
   }
 });
