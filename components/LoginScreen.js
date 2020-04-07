@@ -52,28 +52,38 @@ export default class LoginScreen extends React.Component {
   }
 
   handleLogin = () => {
-    const { email, password, locationCoordinates } = this.state;
-
-    Firebase.auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("Profile"))
-      .catch(error => {
-        console.log(error);
-        Alert.alert(
-          "Uh oh.",
-          "Looks like your e-mail or password is incorrect",
-          { text: "Try Again!", onPress: () => console.log("Try Again!") },
-          { cancelable: false }
-        );
-      });
-
-    let updatedLocation = {
-      locationCoordinates: locationCoordinates
-    };
-    Firebase.firestore()
-      .collection("users")
-      .doc(email)
-      .update(updatedLocation);
+    if (
+      this.state.email == "" ||
+      this.state.password == "" ||
+      this.state.locationCoordinates == ""
+    ) {
+      Alert.alert(
+        "Uh oh.",
+        "Looks like your e-mail or password is incorrect",
+        { text: "Try Again!", onPress: () => console.log("Try Again!") },
+        { cancelable: false }
+      );
+    } else {
+      Firebase.auth()
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(() => this.props.navigation.navigate("Profile"))
+        .catch(error => {
+          console.log(error);
+          Alert.alert(
+            "Uh oh.",
+            "Looks like your e-mail or password is incorrect",
+            { text: "Try Again!", onPress: () => console.log("Try Again!") },
+            { cancelable: false }
+          );
+        });
+      let updatedLocation = {
+        locationCoordinates: this.state.locationCoordinates
+      };
+      Firebase.firestore()
+        .collection("users")
+        .doc(this.state.email)
+        .update(updatedLocation);
+    }
   };
 
   render() {
