@@ -1,16 +1,17 @@
 import React from "react";
 import {
-  Button,
   View,
   Text,
   StyleSheet,
-  Image,
   TextInput,
-  TouchableOpacity,
   Slider
 } from "react-native";
 
-import FirebaseStorageUploader from "./FirebaseStorageUploader";
+import { Avatar, Button } from 'react-native-elements';
+
+import { TouchableOpacity } from "react-native-gesture-handler";
+
+import * as ImagePicker from "expo-image-picker";
 
 import Firebase from "../config/Firebase";
 
@@ -30,9 +31,8 @@ export default class ProfileScreen extends React.Component {
     };
     this.userChanges = this.userChanges.bind(this);
     this.updateProfileDescription = this.updateProfileDescription.bind(this);
-    this.handleSearchDistanceChange = this.handleSearchDistanceChange.bind(
-      this
-    );
+    this.handleSearchDistanceChange = this.handleSearchDistanceChange.bind(this);
+    this.uploadToFirebase = this.uploadToFirebase.bind(this);
     this.refresh = this.refresh.bind(this);
   }
 
@@ -67,6 +67,86 @@ export default class ProfileScreen extends React.Component {
 
     this.setState({ user: user, userInfo: userInfo });
   }
+
+  handleOnPress = () => {
+    ImagePicker.launchImageLibraryAsync({
+      mediaTypes: "Images"
+    })
+      .then(result => {
+        if (!result.cancelled) {
+          const { height, width, type, uri } = result;
+          return this.uriToBlob(uri);
+        }
+      })
+      .then(blob => {
+        return this.uploadToFirebase(blob);
+      })
+      .then(snapshot => {
+        console.log("File uploaded");
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+
+  uriToBlob = uri => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function() {
+        reject(new Error("uriToBlob failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+  };
+
+  uploadToFirebase = blob => {
+    return new Promise((resolve, reject) => {
+      console.log(this.state.user.email);
+
+      var storageRef = Firebase.storage().ref();
+      storageRef
+        .child("profilePictures/" + this.state.user.email + ".jpg")
+        .put(blob, {
+          contentType: "image/jpeg"
+        })
+        .then(snapshot => {
+          blob.close();
+          resolve(snapshot);
+        })
+        .then(
+          (updateUserImageSource = () => {
+            console.log("updating image url...");
+            Firebase.storage()
+              .ref("profilePictures/" + this.state.user.email + ".jpg")
+              .getDownloadURL()
+              .then(url => {
+                console.log(url);
+                let updatedImageUrl = {
+                  imageSource: url
+                };
+                Firebase.firestore()
+                  .collection("users")
+                  .doc(this.state.user.email)
+                  .update(updatedImageUrl);
+              });
+          })
+        )
+        .then(
+          (confirmUpload = () => {
+            console.log("...updated image url");
+            this.refresh();
+          })
+        )
+        .catch(error => {
+          reject(error);
+        });
+    });
+  };
 
   updateProfileDescription() {
     var description = this.state.description;
@@ -128,16 +208,15 @@ export default class ProfileScreen extends React.Component {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <TouchableOpacity style={styles.button} onPress={() => this.refresh()}>
-          <Text style={styles.buttonText}>Refresh Profile</Text>
+        <TouchableOpacity onPress={this.handleOnPress}>
+          <Avatar
+            rounded
+            source={{ uri: this.state.userInfo.imageSource }}
+            size="xlarge"
+          />
         </TouchableOpacity>
-        <Text>{this.state.userInfo.name}</Text>
-        <Image
-          source={{ uri: this.state.userInfo.imageSource }}
-          style={{ height: 250, width: 250 }}
-        />
 
-        <FirebaseStorageUploader />
+        <Text>{this.state.userInfo.name}</Text>
 
         <Text>Description:</Text>
         <TextInput
@@ -152,6 +231,8 @@ export default class ProfileScreen extends React.Component {
         >
           <Text style={styles.buttonText}>Update Profile</Text>
         </TouchableOpacity>
+
+
         <Text>Search Distance: {this.state.searchDistance}km</Text>
         <Slider
           style={{ width: 200, height: 40 }}
