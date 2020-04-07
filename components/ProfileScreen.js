@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Slider
+  Slider,
+  Image
 } from "react-native";
 
 import { Avatar, Button } from 'react-native-elements';
@@ -16,6 +17,8 @@ import * as ImagePicker from "expo-image-picker";
 import Firebase from "../config/Firebase";
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import * as Animatable from 'react-native-animatable';
 
 export default class ProfileScreen extends React.Component {
   _isMounted = false;
@@ -210,30 +213,45 @@ export default class ProfileScreen extends React.Component {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.handleOnPress}>
-          <Avatar
-            rounded
-            source={{ uri: this.state.userInfo.imageSource }}
-            size="xlarge"
+       <Image style={styles.logo} source={require('../assets/logo.jpg')}/>
+        <View style={styles.mypic}>
+          <TouchableOpacity onPress={this.handleOnPress}>
+            <Avatar
+              rounded
+              source={{ uri: this.state.userInfo.imageSource }}
+              size="xlarge"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.content}>
+          <Text style={styles.textstyle}>{this.state.userInfo.name}</Text>
+        <View style={styles.descriptioncontainer}>
+          <Text style={styles.textstyle}>Description:</Text>
+          <View style={styles.descriptioninput}>
+          <TextInput
+            style={styles.description}
+            multiline={true}
+            onChangeText={this.userChanges}
+            placeholder="Write about yourself here!"
+          >
+            {this.state.userInfo.description}
+          </TextInput>
+          <Button
+            icon={
+                <Icon
+                  name="check"
+                  size={25}
+                  color="#44aee3"
+                />
+              }
+            type="outline"
+            buttonStyle={styles.descriptionbutton}
+            onPress={() => this.updateProfileDescription()}
           />
-        </TouchableOpacity>
+          </View>
+        </View>
 
-        <Text>{this.state.userInfo.name}</Text>
-
-        <Text>Description:</Text>
-        <TextInput
-          onChangeText={this.userChanges}
-          placeholder="Write about yourself here!"
-        >
-          {this.state.userInfo.description}
-        </TextInput>
-        <Button
-          title="Update Profile"
-          type="outline"
-          onPress={() => this.updateProfileDescription()}
-        />
-
-        <Text>Search Distance: {this.state.searchDistance}km</Text>
+        <Text style={styles.textstyle}>Search Distance: {this.state.searchDistance}km</Text>
         <Slider
           style={{ width: 200, height: 40 }}
           value={this.state.userInfo.searchDistance}
@@ -245,6 +263,8 @@ export default class ProfileScreen extends React.Component {
           onValueChange={val => this.setState({ searchDistance: val })}
           onSlidingComplete={this.handleSearchDistanceChange}
         />
+        </View>
+
         <View style={styles.logout}>
           <Button 
             type="clear"
@@ -302,6 +322,7 @@ export default class ProfileScreen extends React.Component {
           />
           </TouchableOpacity>
         </View>
+        
       </View>
     );
   }
@@ -318,7 +339,7 @@ const styles = StyleSheet.create({
     width: "85%",
     margin: 10,
     padding: 15,
-    fontSize: 16,
+    fontSize: 30,
     borderColor: "#d3d3d3",
     borderBottomWidth: 1,
     textAlign: "center"
@@ -354,5 +375,46 @@ const styles = StyleSheet.create({
     position:"absolute",
     top:50,
     right:20
+  },
+  description:{
+    width:"60%",
+    backgroundColor:"#bef7f3",
+    marginVertical:20
+  },
+  descriptionbutton:{
+    width:40,
+    height:40,
+    marginVertical:20
+  },
+  descriptioninput:{
+    flexDirection: "row"
+  },
+  mypic:{
+    position:'absolute',
+    top:150,
+    marginVertical:10
+  },
+  textstyle:{
+    fontSize:20,
+    fontWeight:"bold"
+  },
+  descriptioncontainer:{
+    marginVertical:20,
+    alignItems:"center"
+  },
+  heart: {
+    height:100,
+    width:100
+  },
+  logo:{
+    width:"80%",
+    height: 70,
+    top:38,
+    left:20,
+    position:"absolute"
+  },
+  content:{
+    alignItems:"center",
+    backgroundColor:"#fff"
   }
 });

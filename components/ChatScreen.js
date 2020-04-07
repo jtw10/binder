@@ -126,6 +126,7 @@ export default class ProfileScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+      <Image style={styles.logo} source={require('../assets/logo.jpg')}/>
         <View style={styles.hello}>
           <Text>
             Hi {this.state.userInfo.name}, this is where you suggest a meeting
@@ -275,13 +276,21 @@ const styles = StyleSheet.create({
   },
   list:{
     marginTop:0,
-    height:"78%",
+    height:"70%",
     position:"absolute",
     bottom:88
   },
   hello:{
-    flex:1,
+    position:"absolute",
+    top:80,
     padding:50,
     paddingBottom:10
-  }
+  },
+  logo:{
+    width:"80%",
+    height: 70,
+    top:38,
+    left:20,
+    position:"absolute"
+  },
 });

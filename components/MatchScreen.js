@@ -49,6 +49,7 @@ export default class ProfileScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+       <Image style={styles.logo} source={require('../assets/logo.jpg')}/>
         <View style={styles.card}>
          <CardStack />
         </View>
@@ -148,5 +149,12 @@ const styles = StyleSheet.create({
     height:"78%",
     position:'absolute',
     bottom:88
-  }
+  },
+  logo:{
+    width:"80%",
+    height: 70,
+    top:38,
+    left:20,
+    position:"absolute"
+  },
 });
