@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     position:"absolute"
   },
   content:{
+    backgroundColor:"#fff",
     width:"100%",
     alignItems:"center",
     position:"absolute",
