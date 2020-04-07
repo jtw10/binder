@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TextInput,
   Slider,
-  Image
+  Image,
+  Alert
 } from "react-native";
 
 import { Avatar, Button } from 'react-native-elements';
@@ -162,6 +163,12 @@ export default class ProfileScreen extends React.Component {
       .collection("users")
       .doc(user.email)
       .update(updatedDescription);
+
+      Alert.alert(
+        "Congrats",
+        "Description Updated Successfully!",["ok"],
+        { cancelable: false }
+      );
   }
 
   userChanges = userInput => {
@@ -378,7 +385,7 @@ const styles = StyleSheet.create({
   },
   description:{
     width:"60%",
-    backgroundColor:"#bef7f3",
+    backgroundColor:"#c8dedc",
     marginVertical:20
   },
   descriptionbutton:{
