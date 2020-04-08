@@ -242,6 +242,7 @@ export default class ProfileScreen extends React.Component {
           <TextInput
             style={styles.description}
             multiline={true}
+            
             onChangeText={this.userChanges}
             placeholder="Write about yourself here!"
           >
@@ -430,6 +431,7 @@ const styles = StyleSheet.create({
   descriptionWrapper: {
     flexDirection:"row",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    height:90
   },
 });
