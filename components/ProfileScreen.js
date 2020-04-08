@@ -7,7 +7,7 @@ import {
   Slider,
   Image,
   Alert,
-  Keyboard
+  ScrollView
 } from "react-native";
 
 import { Avatar, Button } from 'react-native-elements';
@@ -163,7 +163,7 @@ export default class ProfileScreen extends React.Component {
       .doc(user.email)
       .update(updatedDescription);
 
-      Keyboard.dismiss();
+ 
 
       Alert.alert(
         "Congrats",
@@ -238,6 +238,7 @@ export default class ProfileScreen extends React.Component {
         <View style={styles.descriptioncontainer}>
           <Text style={styles.textstyle}>Description:</Text>
           <View style={styles.descriptioninput}>
+          <ScrollView contentContainerStyle={styles.descriptionWrapper} scrollEnabled={false} keyboardShouldPersistTaps={"never"}>
           <TextInput
             style={styles.description}
             multiline={true}
@@ -259,6 +260,7 @@ export default class ProfileScreen extends React.Component {
             buttonStyle={styles.descriptionbutton}
             onPress={() => this.updateProfileDescription()}
           />
+          </ScrollView>
           </View>
         </View>
 
@@ -424,5 +426,10 @@ const styles = StyleSheet.create({
   content:{
     alignItems:"center",
     backgroundColor:"#fff"
-  }
+  },
+  descriptionWrapper: {
+    flexDirection:"row",
+    alignItems: "center",
+    justifyContent: "center"
+  },
 });
