@@ -6,6 +6,9 @@ import {
   TextInput,
   Slider,
   Image,
+  Keyboard,
+  ScrollView,
+  TouchableWithoutFeedback,
   Alert
 } from "react-native";
 
@@ -155,6 +158,7 @@ export default class ProfileScreen extends React.Component {
   };
 
   updateProfileDescription() {
+    Keyboard.dismiss();
     var description = this.state.description;
     let updatedDescription = {
       description: description
@@ -234,11 +238,13 @@ export default class ProfileScreen extends React.Component {
           <Text style={styles.textstyle}>{this.state.userInfo.name}</Text>
         <View style={styles.descriptioncontainer}>
           <Text style={styles.textstyle}>Description:</Text>
+          <ScrollView scrollEnabled={false} keyboardShouldPersistTaps={"handled"} ref='scrollView'>
           <View style={styles.descriptioninput}>
           <TextInput
             style={styles.description}
             multiline={true}
             onChangeText={this.userChanges}
+            onSubmitEditing={Keyboard.dismiss}
             placeholder="Write about yourself here!"
           >
             {this.state.userInfo.description}
@@ -256,6 +262,7 @@ export default class ProfileScreen extends React.Component {
             onPress={() => this.updateProfileDescription()}
           />
           </View>
+          </ScrollView>
         </View>
 
         <Text style={styles.textstyle}>Search Distance: {this.state.searchDistance}km</Text>

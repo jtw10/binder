@@ -10,6 +10,16 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 
 import * as geolib from "geolib";
+import Geocode from "react-geocode";
+
+// set Google Maps Geocoding API for purposes of quota management.
+Geocode.setApiKey("AIzaSyBjMc9ZyK_vZxFKbH5XBTGmtohA3y0L9uw");
+ 
+// set response language. Defaults to english.
+Geocode.setLanguage("en");
+
+// A Geocoding request with region=ca (Canada) will return the Canadian city.
+Geocode.setRegion("ca");
 
 class Card extends React.Component {
   constructor(props) {
@@ -104,7 +114,8 @@ export default class CardStack extends React.Component {
         snapshot.forEach(doc => {
           let userInfo = this.state.userInfo;
 
-          console.log(doc.id, "=>", doc.data());
+
+          console.log(doc.id, "=>", doc.data()); 
 
           let locationCoordinates = doc.data().locationCoordinates;
           let locationSplit = locationCoordinates.split(",");
@@ -122,7 +133,21 @@ export default class CardStack extends React.Component {
           };
 
           var distanceBetween =
-            geolib.getPreciseDistance(currentUser, targetUser, 100) / 1000;
+          geolib.getPreciseDistance(currentUser, targetUser, 100) / 1000;
+
+          if (userInfo.address != NaN && userInfo.address != "") {
+            var targetUser_Addr = ""
+            Geocode.fromAddress(userInfo.address).then(
+              response => { 
+                targetUser_Addr = response.results[0].geometry.location;
+              });
+              var homedistBetween = 
+              geolib.getPreciseDistance(currentUser, targetUser_Addr, 100) / 1000;
+
+              if (homedistBetween < distanceBetween) {
+                distanceBetween = homedistBetween;
+              }
+          } 
 
           let tempUser = {
             email: doc.data().email,

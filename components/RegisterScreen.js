@@ -19,7 +19,8 @@ export default class RegisterScreen extends React.Component {
     email: "",
     password: "",
     locationCoordinates: "",
-    imageSource: ""
+    imageSource: "",
+    address: "",
   };
 
   _getLocationPermissions = async () => {
@@ -55,7 +56,7 @@ export default class RegisterScreen extends React.Component {
   }
 
   handleSignUp = () => {
-    const { email, password, name, locationCoordinates } = this.state;
+    const { email, password, name, locationCoordinates, address } = this.state;
 
     Firebase.auth()
       .createUserWithEmailAndPassword(email, password)
@@ -65,6 +66,7 @@ export default class RegisterScreen extends React.Component {
           email: email,
           locationCoordinates: locationCoordinates,
           imageSource: defaultImage,
+          address: address,
           swipedAlready: [],
           swipedYes: [],
           searchDistance: 50
@@ -104,6 +106,12 @@ export default class RegisterScreen extends React.Component {
             onChangeText={password => this.setState({ password })}
             placeholder="Password"
             secureTextEntry={true}
+          />
+          <TextInput
+            style={styles.inputBox}
+            value={this.state.address}
+            onChangeText={address => this.setState({ address })}
+            placeholder="Address"
           />
           <Button
             title="Signup"
