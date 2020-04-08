@@ -6,20 +6,19 @@ import {
   TextInput,
   Slider,
   Image,
-  Alert
+  Alert,
+  Keyboard
 } from "react-native";
 
 import { Avatar, Button } from 'react-native-elements';
 
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 import * as ImagePicker from "expo-image-picker";
 
 import Firebase from "../config/Firebase";
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-import * as Animatable from 'react-native-animatable';
 
 export default class ProfileScreen extends React.Component {
   _isMounted = false;
@@ -164,6 +163,8 @@ export default class ProfileScreen extends React.Component {
       .doc(user.email)
       .update(updatedDescription);
 
+      Keyboard.dismiss();
+
       Alert.alert(
         "Congrats",
         "Description Updated Successfully!",["ok"],
@@ -219,6 +220,8 @@ export default class ProfileScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     return (
+
+      
       <View style={styles.container}>
        <Image style={styles.logo} source={require('../assets/logo.jpg')}/>
         <View style={styles.mypic}>
@@ -241,6 +244,7 @@ export default class ProfileScreen extends React.Component {
             onChangeText={this.userChanges}
             placeholder="Write about yourself here!"
           >
+         
             {this.state.userInfo.description}
           </TextInput>
           <Button
@@ -331,6 +335,7 @@ export default class ProfileScreen extends React.Component {
         </View>
         
       </View>
+
     );
   }
 }
@@ -398,7 +403,7 @@ const styles = StyleSheet.create({
   },
   mypic:{
     position:'absolute',
-    top:150,
+    top:140,
     marginVertical:10
   },
   textstyle:{
@@ -408,10 +413,6 @@ const styles = StyleSheet.create({
   descriptioncontainer:{
     marginVertical:20,
     alignItems:"center"
-  },
-  heart: {
-    height:100,
-    width:100
   },
   logo:{
     width:"80%",
