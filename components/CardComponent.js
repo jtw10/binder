@@ -18,7 +18,7 @@ class Card extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.cardcontainer}>
         <View style={styles.card}>
           <Image
             style={styles.card}
@@ -28,10 +28,10 @@ class Card extends React.Component {
           />
         </View>
         <Text style={styles.nameStyle}>{this.props.name}</Text>
-        <Text>
-          {this.props.distance}km away{"\n"}
+        <Text style={styles.detail}>
+          {this.props.distance}km away
         </Text>
-        <Text>{this.props.description}</Text>
+        <Text style={styles.detail}>{this.props.description}</Text>
       </View>
     );
   }
@@ -204,12 +204,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: 300,
-    height: 300
+    height: 300,
+    marginHorizontal: 18,
+    marginVertical: 10,
   },
   nameStyle: {
-    fontSize: 28
+    fontSize: 28,
+    fontWeight:"bold",
+    marginHorizontal: 18,
+    marginBottom:10
   },
   noMoreCardsText: {
-    fontSize: 22
+    fontSize: 22,
+  },
+  cardcontainer:{
+    borderRadius:6,
+    elevation:3,
+    backgroundColor:'#fff',
+    shadowOffset: {width:1, height:1},
+    shadowColor: '#333',
+    shadowOpacity: 0.3,
+    shadowRadius:5,
+  },
+  detail:{
+    marginHorizontal: 18,
+    marginBottom:10
   }
 });
