@@ -73,6 +73,18 @@ export default class CardStack extends React.Component {
     };
   }
 
+  stuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+    while(0 != currentIndex) {
+      randomIndex = Math.floor(Math.random()*currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
+
   componentDidMount() {
     console.log("swipecard mounted");
 
@@ -165,6 +177,7 @@ export default class CardStack extends React.Component {
             userlist.push(tempUser);
           }
         });
+        userlist = this.stuffle(userlist)
         this.setState({ cards: userlist });
       })
       .catch(error => {
