@@ -8,7 +8,6 @@ import {
   Image,
   Keyboard,
   ScrollView,
-  TouchableWithoutFeedback,
   Alert
 } from "react-native";
 
@@ -236,47 +235,47 @@ export default class ProfileScreen extends React.Component {
         </View>
         <View style={styles.content}>
           <Text style={styles.textstyle}>{this.state.userInfo.name}</Text>
-        <View style={styles.descriptioncontainer}>
-          <Text style={styles.textstyle}>Description:</Text>
-          <ScrollView scrollEnabled={false} keyboardShouldPersistTaps={"handled"} ref='scrollView'>
-          <View style={styles.descriptioninput}>
-          <TextInput
-            style={styles.description}
-            multiline={true}
-            onChangeText={this.userChanges}
-            onSubmitEditing={Keyboard.dismiss}
-            placeholder="Write about yourself here!"
-          >
-            {this.state.userInfo.description}
-          </TextInput>
-          <Button
-            icon={
-                <Icon
-                  name="check"
-                  size={25}
-                  color="#44aee3"
-                />
-              }
-            type="outline"
-            buttonStyle={styles.descriptionbutton}
-            onPress={() => this.updateProfileDescription()}
-          />
+          <View style={styles.descriptioncontainer}>
+            <Text style={styles.textstyle}>Description:</Text>
+            <View style={styles.descriptioninput}>
+              <ScrollView contentContainerStyle={styles.descriptionWrapper} scrollEnabled={false} keyboardShouldPersistTaps={"never"}>
+                <TextInput
+                  style={styles.description}
+                  multiline={true}
+                  onChangeText={this.userChanges}
+                  onSubmitEditing={Keyboard.dismiss}
+                  placeholder="Write about yourself here!"
+                >
+                  {this.state.userInfo.description}
+                </TextInput>
+                <Button
+                icon={
+                    <Icon
+                      name="check"
+                      size={25}
+                      color="#44aee3"
+                    />
+                  }
+                type="outline"
+                buttonStyle={styles.descriptionbutton}
+                onPress={() => this.updateProfileDescription()}
+              />
+              </ScrollView>
+            </View>
           </View>
-          </ScrollView>
-        </View>
 
-        <Text style={styles.textstyle}>Search Distance: {this.state.searchDistance}km</Text>
-        <Slider
-          style={{ width: 200, height: 40 }}
-          value={this.state.userInfo.searchDistance}
-          minimumValue={5}
-          maximumValue={50}
-          step={5}
-          minimumTrackTintColor="#000000"
-          maximumTrackTintColor="#GGGGGG"
-          onValueChange={val => this.setState({ searchDistance: val })}
-          onSlidingComplete={this.handleSearchDistanceChange}
-        />
+          <Text style={styles.textstyle}>Search Distance: {this.state.searchDistance}km</Text>
+          <Slider
+            style={{ width: 200, height: 40 }}
+            value={this.state.userInfo.searchDistance}
+            minimumValue={5}
+            maximumValue={50}
+            step={5}
+            minimumTrackTintColor="#000000"
+            maximumTrackTintColor="#GGGGGG"
+            onValueChange={val => this.setState({ searchDistance: val })}
+            onSlidingComplete={this.handleSearchDistanceChange}
+          />
         </View>
 
         <View style={styles.logout}>
@@ -392,16 +391,24 @@ const styles = StyleSheet.create({
   },
   description:{
     width:"60%",
+    minHeight: 40,
     backgroundColor:"#c8dedc",
-    marginVertical:20
+    marginVertical: 15,
+    alignContent: "center"
+  },
+  descriptionWrapper: {
+    flexDirection:"row",
+    alignItems: "center",
+    justifyContent: "center"
   },
   descriptionbutton:{
     width:40,
     height:40,
-    marginVertical:20
   },
   descriptioninput:{
-    flexDirection: "row"
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent:"center",
   },
   mypic:{
     position:'absolute',
@@ -413,8 +420,8 @@ const styles = StyleSheet.create({
     fontWeight:"bold"
   },
   descriptioncontainer:{
-    marginVertical:20,
-    alignItems:"center"
+    alignItems:"center",
+    justifyContent:"center"
   },
   heart: {
     height:100,
