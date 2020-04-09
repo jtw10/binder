@@ -18,7 +18,9 @@ MESSAGE_SENDER_ID=xxxx<br>
 APP_ID=xxxx<br>
 STORAGE_BUCKET=xxxx<br>
 
-Run `expo start` in your command line.
+Run `npm install` in your command line to install dependencies in the local node_modules folder.
+
+Run `expo start` in your command line to start the app.
 
 ## Contributers
 
