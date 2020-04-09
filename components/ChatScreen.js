@@ -8,7 +8,7 @@ import {
   FlatList
 } from "react-native";
 
-import {Button} from "react-native-elements";
+import {Button, Avatar} from "react-native-elements";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -102,7 +102,7 @@ export default class ProfileScreen extends React.Component {
 
           console.log(tempUser);
 
-          if (tempUser.swipedYes.indexOf(userInfo.email) > -1) {
+          if (tempUser.swipedYes.indexOf(userInfo.email) > -1 && userInfo.swipedYes.indexOf(tempUser.email) > -1) {
             userlist.push(tempUser);
           }
         });
@@ -114,6 +114,25 @@ export default class ProfileScreen extends React.Component {
       });
   }
 
+  shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+  }
+
   checkMatches() {}
 
   render() {
@@ -122,7 +141,7 @@ export default class ProfileScreen extends React.Component {
     for (let i = 0; i < this.state.matchedUsers.length; i++) {
       matchedUsers.push(this.state.matchedUsers[i]);
     }
-    console.log(matchedUsers);
+    matchedUsers = this.shuffle(matchedUsers);
 
     return (
       <View style={styles.container}>
@@ -148,17 +167,19 @@ export default class ProfileScreen extends React.Component {
                 })
               }
             >
-              <Image
-                style={styles.itemImage}
-                source={{ uri: item.imageSource }}
-              />
-              <Text style={styles.itemText}>
-                {item.name}
-                {"\n"}
-                {item.distance} km
-                {"\n"}
-                {item.description}
-              </Text>
+              <View style={styles.matchcard}>
+                <Avatar
+                  rounded
+                  source={{ uri: item.imageSource }}
+                  size = 'medium'
+                />
+                <Text style={styles.itemText}>
+                  {item.name}
+                  {"\b"}({item.distance} km)
+                  {"\n"}
+                  {item.description}
+                </Text>
+              </View>
             </TouchableOpacity>
           )}
           keyExtractor={item => item.email}
@@ -259,14 +280,12 @@ const styles = StyleSheet.create({
    
   },
   itemText: {
-    backgroundColor: "#E3E4E5",
-    paddingLeft: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginTop: 0,
-    marginBottom: 0,
-    marginHorizontal: 16,
-    color: "#013670"
+    paddingLeft:10,
+    marginBottom:0,
+    borderBottomWidth:1,
+    borderColor:"#abcbff",
+    color: "#013670",
+    width:"80%"
   },
   itemImage: {
     padding: 80,
@@ -293,4 +312,7 @@ const styles = StyleSheet.create({
     left:20,
     position:"absolute"
   },
+  matchcard:{
+    flexDirection:"row"
+  }
 });
