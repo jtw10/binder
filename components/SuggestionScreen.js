@@ -147,11 +147,11 @@ export default class SuggestionScreen extends React.Component {
           />
          
           <Text style={styles.name}> {matchName} </Text>
-
           </View>
 
           <Text style={styles.itemText}>
-            
+            Description:{"\b\n"}
+            {matchDescription} {"\b\n\n"}
             E-mail your match to arrange a meet up time and location!{"\b\n"}
             Email: {"\b"} {matchEmail}
           </Text>
@@ -199,7 +199,8 @@ const styles = StyleSheet.create({
   },
   pic_name:{
     flexDirection:"row",
-    marginVertical:50
+    marginTop:50,
+    marginBottom:20
   },
   back:{
     position:"absolute",
@@ -208,6 +209,6 @@ const styles = StyleSheet.create({
   },
   itemText:{
     marginHorizontal:18,
-    marginVertical:10
+    marginVertical:5
   }
 });
