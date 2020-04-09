@@ -102,7 +102,7 @@ export default class ProfileScreen extends React.Component {
 
           console.log(tempUser);
 
-          if (tempUser.swipedYes.indexOf(userInfo.email) > -1) {
+          if (tempUser.swipedYes.indexOf(userInfo.email) > -1 && userInfo.swipedYes.indexOf(tempUser.email) > -1) {
             userlist.push(tempUser);
           }
         });
@@ -175,9 +175,9 @@ export default class ProfileScreen extends React.Component {
                 />
                 <Text style={styles.itemText}>
                   {item.name}
-                  {"\b"}({item.distance} km)
+                  {"\b"}
                   {"\n"}
-                  {item.description}
+                  ({item.distance} km)
                 </Text>
               </View>
             </TouchableOpacity>
@@ -281,11 +281,13 @@ const styles = StyleSheet.create({
   },
   itemText: {
     paddingLeft:10,
-    marginBottom:0,
+    paddingVertical:5,
+    marginVertical:0,
+    borderTopWidth:1,
     borderBottomWidth:1,
     borderColor:"#abcbff",
     color: "#013670",
-    width:"80%"
+    width:"80%",
   },
   itemImage: {
     padding: 80,
@@ -310,9 +312,10 @@ const styles = StyleSheet.create({
     height: 70,
     top:38,
     left:20,
-    position:"absolute"
+    position:"absolute",
   },
   matchcard:{
-    flexDirection:"row"
+    flexDirection:"row",
+    marginVertical:5,
   }
 });
