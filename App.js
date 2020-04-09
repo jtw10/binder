@@ -62,7 +62,10 @@ const StackNavigator = createStackNavigator(
       }
     },
     "Meet Up": {
-      screen: SuggestionScreen
+      screen: SuggestionScreen,
+      navigationOptions: {
+      headerShown: false      
+      }
     }
   },
   {
