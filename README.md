@@ -1,10 +1,10 @@
-# binder
+# ![binder logo](assets/logo.jpg)
 
-Find a study mate nearby!
+### Find a study mate nearby!
 
 ## What is Binder?
 
-Binder uses location settings to determine nearby users to match with. Users will be able to filter based on location and other preferences.
+Binder is a Tinder-like app that allows users to meet people for the purpose of studying. Users are able to upload a picture and write a short description that represents themselves. Binder uses location settings to determine nearby users to match with. Matched users will be given a list of suggested meeting locations based on the midpoint between their last known locations and Google Places API, and will be encouraged to arrange a time and location using the e-mail that they registered with. Users will be able to filter their search results based on current location and other preferences. 
 
 ## Usage
 
@@ -17,6 +17,8 @@ PROJECT_ID=xxxx<br>
 MESSAGE_SENDER_ID=xxxx<br>
 APP_ID=xxxx<br>
 STORAGE_BUCKET=xxxx<br>
+
+Replace [YOUR GOOGLE PLACES API KEY] with your actual API key in components/SuggestionScreen.js
 
 Run `npm install` in your command line to install dependencies in the local node_modules folder.
 
