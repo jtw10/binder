@@ -23,14 +23,12 @@ class Card extends React.Component {
           <Image
             style={styles.card}
             source={{
-              uri: `${this.props.imageSource}`
+              uri: `${this.props.imageSource}`,
             }}
           />
         </View>
         <Text style={styles.nameStyle}>{this.props.name}</Text>
-        <Text style={styles.detail}>
-          {this.props.distance}km away
-        </Text>
+        <Text style={styles.detail}>{this.props.distance}km away</Text>
         <Text style={styles.detail}>{this.props.description}</Text>
       </View>
     );
@@ -59,8 +57,22 @@ export default class CardStack extends React.Component {
       user: {},
       userInfo: {},
       currentUserLat: "",
-      currentUserLon: ""
+      currentUserLon: "",
     };
+  }
+
+  stuffle(array) {
+    var currentIndex = array.length,
+      temporaryValue,
+      randomIndex;
+    while (0 != currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
   }
 
   componentDidMount() {
@@ -72,7 +84,7 @@ export default class CardStack extends React.Component {
       .doc(user.email);
     let userInfo = currentUserRef
       .get()
-      .then(doc => {
+      .then((doc) => {
         if (!doc.exists) {
           console.log("No user");
         } else {
@@ -85,11 +97,11 @@ export default class CardStack extends React.Component {
 
           this.setState({
             currentUserLat: currentUserLat,
-            currentUserLon: currentUserLon
+            currentUserLon: currentUserLon,
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("Error getting document", error);
       });
 
@@ -100,8 +112,8 @@ export default class CardStack extends React.Component {
 
     let allUsers = userRef
       .get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
           let userInfo = this.state.userInfo;
 
           console.log(doc.id, "=>", doc.data());
@@ -113,12 +125,12 @@ export default class CardStack extends React.Component {
 
           var targetUser = {
             latitude: targetUserLat,
-            longitude: targetUserLon
+            longitude: targetUserLon,
           };
 
           var currentUser = {
             latitude: this.state.currentUserLat,
-            longitude: this.state.currentUserLon
+            longitude: this.state.currentUserLon,
           };
 
           var distanceBetween =
@@ -130,7 +142,7 @@ export default class CardStack extends React.Component {
             description: doc.data().description,
             distance: distanceBetween,
             imageSource: doc.data().imageSource,
-            swipedYes: doc.data().swipedYes
+            swipedYes: doc.data().swipedYes,
           };
           console.log(tempUser.distance);
           if (
@@ -140,9 +152,10 @@ export default class CardStack extends React.Component {
             userlist.push(tempUser);
           }
         });
+        userlist = this.stuffle(userlist);
         this.setState({ cards: userlist });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log("Error", error);
       });
   }
@@ -150,16 +163,14 @@ export default class CardStack extends React.Component {
   handleYup(card) {
     console.log(`Yup for ${card.name}`);
 
-    let userRef = Firebase.firestore()
-      .collection("users")
-      .doc(user.email);
+    let userRef = Firebase.firestore().collection("users").doc(user.email);
 
     userRef.update({
-      swipedAlready: firebase.firestore.FieldValue.arrayUnion(card.email)
+      swipedAlready: firebase.firestore.FieldValue.arrayUnion(card.email),
     });
 
     userRef.update({
-      swipedYes: firebase.firestore.FieldValue.arrayUnion(card.email)
+      swipedYes: firebase.firestore.FieldValue.arrayUnion(card.email),
     });
 
     console.log(card.swipedYes);
@@ -176,12 +187,10 @@ export default class CardStack extends React.Component {
   handleNope(card) {
     console.log(`Nope for ${card.name}`);
 
-    let userRef = Firebase.firestore()
-      .collection("users")
-      .doc(user.email);
+    let userRef = Firebase.firestore().collection("users").doc(user.email);
 
     userRef.update({
-      swipedAlready: firebase.firestore.FieldValue.arrayUnion(card.email)
+      swipedAlready: firebase.firestore.FieldValue.arrayUnion(card.email),
     });
   }
 
@@ -189,7 +198,7 @@ export default class CardStack extends React.Component {
     return (
       <SwipeCards
         cards={this.state.cards}
-        renderCard={cardData => <Card {...cardData} />}
+        renderCard={(cardData) => <Card {...cardData} />}
         renderNoMoreCards={() => <NoMoreCards />}
         handleYup={this.handleYup}
         handleNope={this.handleNope}
@@ -210,24 +219,24 @@ const styles = StyleSheet.create({
   },
   nameStyle: {
     fontSize: 28,
-    fontWeight:"bold",
+    fontWeight: "bold",
     marginHorizontal: 18,
-    marginBottom:10
+    marginBottom: 10,
   },
   noMoreCardsText: {
     fontSize: 22,
   },
-  cardcontainer:{
-    borderRadius:6,
-    elevation:3,
-    backgroundColor:'#fff',
-    shadowOffset: {width:1, height:1},
-    shadowColor: '#333',
+  cardcontainer: {
+    borderRadius: 6,
+    elevation: 3,
+    backgroundColor: "#fff",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#333",
     shadowOpacity: 0.3,
-    shadowRadius:5,
+    shadowRadius: 5,
   },
-  detail:{
+  detail: {
     marginHorizontal: 18,
-    marginBottom:10
-  }
+    marginBottom: 10,
+  },
 });
