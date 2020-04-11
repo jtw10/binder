@@ -1,18 +1,22 @@
 import React from "react";
 import {
-  Button,
   View,
   Text,
   StyleSheet,
   Image,
   TextInput,
-  TouchableOpacity,
   FlatList
 } from "react-native";
+
+import {Button, Avatar} from "react-native-elements";
+
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Firebase from "../config/Firebase";
 
 import * as geolib from "geolib";
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class ProfileScreen extends React.Component {
   constructor(props) {
@@ -98,7 +102,7 @@ export default class ProfileScreen extends React.Component {
 
           console.log(tempUser);
 
-          if (tempUser.swipedYes.indexOf(userInfo.email) > -1) {
+          if (tempUser.swipedYes.indexOf(userInfo.email) > -1 && userInfo.swipedYes.indexOf(tempUser.email) > -1) {
             userlist.push(tempUser);
           }
         });
@@ -110,6 +114,25 @@ export default class ProfileScreen extends React.Component {
       });
   }
 
+  shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+  }
+
   checkMatches() {}
 
   render() {
@@ -118,17 +141,18 @@ export default class ProfileScreen extends React.Component {
     for (let i = 0; i < this.state.matchedUsers.length; i++) {
       matchedUsers.push(this.state.matchedUsers[i]);
     }
-    console.log(matchedUsers);
+    matchedUsers = this.shuffle(matchedUsers);
 
     return (
       <View style={styles.container}>
-        <View style={{ padding: 50 }}>
+      <Image style={styles.logo} source={require('../assets/logo.jpg')}/>
+        <View style={styles.hello}>
           <Text>
             Hi {this.state.userInfo.name}, this is where you suggest a meeting
             place with your matches!
           </Text>
         </View>
-
+        <View style={styles.list}>
         <FlatList
           data={matchedUsers}
           renderItem={({ item }) => (
@@ -143,34 +167,68 @@ export default class ProfileScreen extends React.Component {
                 })
               }
             >
-              <Image
-                style={styles.itemImage}
-                source={{ uri: item.imageSource }}
-              />
-              <Text style={styles.itemText}>
-                {item.name}
-                {"\n"}
-                {item.distance} km
-                {"\n"}
-                {item.description}
-              </Text>
+              <View style={styles.matchcard}>
+                <Avatar
+                  rounded
+                  source={{ uri: item.imageSource }}
+                  size = 'medium'
+                />
+                <Text style={styles.itemText}>
+                  {item.name}
+                  {"\b"}
+                  {"\n"}
+                  ({item.distance} km)
+                </Text>
+              </View>
             </TouchableOpacity>
           )}
           keyExtractor={item => item.email}
         />
+        </View>
 
-        <Button
-          title="Match"
-          onPress={() => this.props.navigation.navigate("Match")}
-        />
-        <Button
-          title="Chat"
-          onPress={() => this.props.navigation.navigate("Chat")}
-        />
-        <Button
-          title="Profile"
-          onPress={() => this.props.navigation.navigate("Profile")}
-        />
+        <View style={styles.tabbar}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate("Match")}>
+            <Button
+              type="clear"
+              icon={
+                <Icon
+                  name="meetup"
+                  size={40}
+                  color="#44aee3"
+                />
+              }
+              buttonStyle={styles.button}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => this.props.navigation.navigate("Chat")}>
+            <Button
+              type="clear"
+              icon={
+                <Icon
+                  name="comments"
+                  size={40}
+                  color="#44aee3"
+                />
+              }
+              buttonStyle={styles.buttonselected}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity  onPress={() => this.props.navigation.navigate("Profile")}>
+          <Button
+            type="clear"
+            icon={
+              <Icon
+                name="user"
+                size={40}
+                color="#44aee3"
+              />
+            }
+            buttonStyle={styles.button}
+          />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -194,37 +252,70 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
-    marginBottom: 20,
-    paddingVertical: 5,
+    marginBottom: 0,
+    paddingVertical: 0,
     alignItems: "center",
-    backgroundColor: "#F6820D",
-    borderColor: "#F6820D",
-    borderWidth: 1,
-    borderRadius: 5,
-    width: 200
+    width: 115,
+    height:70,
+    borderTopColor:"#44aee3",
+    borderTopWidth:2,
+    
   },
-  buttonText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff"
+  buttonselected: {
+    marginTop: 30,
+    marginBottom: 0,
+    paddingVertical: 0,
+    alignItems: "center",
+    width: 115,
+    height:70,
+    borderTopColor:"#44aee3",
+    borderTopWidth:4
   },
-  buttonSignup: {
-    fontSize: 12
+  tabbar:{
+    flexDirection: 'row',
+    width:"90%",
+    justifyContent:"space-between",
+    position:"absolute",
+    bottom:12,
+   
   },
   itemText: {
-    backgroundColor: "#E3E4E5",
-    paddingLeft: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginTop: 0,
-    marginBottom: 0,
-    marginHorizontal: 16,
-    color: "#013670"
+    paddingLeft:10,
+    paddingVertical:5,
+    marginVertical:0,
+    borderTopWidth:1,
+    borderBottomWidth:1,
+    borderColor:"#abcbff",
+    color: "#013670",
+    width:"80%",
   },
   itemImage: {
     padding: 80,
     marginTop: 10,
     marginBottom: 0,
     marginHorizontal: 16
+  },
+  list:{
+    marginTop:0,
+    height:"70%",
+    position:"absolute",
+    bottom:88
+  },
+  hello:{
+    position:"absolute",
+    top:80,
+    padding:50,
+    paddingBottom:10
+  },
+  logo:{
+    width:"80%",
+    height: 70,
+    top:38,
+    left:20,
+    position:"absolute",
+  },
+  matchcard:{
+    flexDirection:"row",
+    marginVertical:5,
   }
 });

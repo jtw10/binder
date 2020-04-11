@@ -1,6 +1,10 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, Button, FlatList } from "react-native";
-import { GiftedChat } from "react-native-gifted-chat";
+import { Text, View, StyleSheet,FlatList } from "react-native";
+
+import { Avatar, Button } from 'react-native-elements';
+
+// import { GiftedChat } from "react-native-gifted-chat";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Firebase from "../config/Firebase";
 
@@ -90,13 +94,13 @@ export default class SuggestionScreen extends React.Component {
     if (midpoint != "") {
       fetch(
         "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
-          "key=AIzaSyCIF6EknD6lPU8XAywcFE6McHPGNr70ur4" +
+          "key=[YOUR GOOGLE PLACES API KEY]" +
           "&location=" +
           midpoint.latitude +
           "," +
           midpoint.longitude +
           "&radius=4000" +
-          "&type=coffee"
+          "&type=cafe"
       )
         .then(response => response.json())
         .then(responseJson => {
@@ -104,13 +108,13 @@ export default class SuggestionScreen extends React.Component {
             suggestedLocations.push(responseJson.results[0]);
           }
           if (responseJson.results.length > 1) {
-            if (responseJson.results.length < 4) {
+            if (responseJson.results.length < 7) {
               for (let i = 1; i < responseJson.results.length; i++) {
                 suggestedLocations.push(responseJson.results[i]);
               }
             }
-            if (responseJson.results.length >= 4) {
-              for (let i = 1; i < 4; i++) {
+            if (responseJson.results.length >= 7) {
+              for (let i = 1; i < 7; i++) {
                 suggestedLocations.push(responseJson.results[i]);
               }
             }
@@ -121,30 +125,51 @@ export default class SuggestionScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{matchName}</Text>
-        <Image
-          style={styles.itemImage}
-          source={{ uri: matchImageSource }}
-          resizeMode="cover"
-        />
-        <View style={styles.itemText}>
-          <Text>User Description: </Text>
-          <Text>{matchDescription}</Text>
-          <Text>User Contact: </Text>
-          <Text>{matchEmail}</Text>
+        <View style={styles.back}>
+          <Button 
+            type="clear"
+              icon={
+                <Icon
+                  name="chevron-left"
+                  size={35}
+                  color="#000"
+                />
+              }
+            onPress={() => this.props.navigation.navigate("Chat")}
+          />
         </View>
-        <View style={styles.container}>
-          <Text>
+
+        <View style={styles.pic_name}>
+          <Avatar
+            rounded
+            source={{ uri: matchImageSource }}
+            size = 'large'
+          />
+         
+          <Text style={styles.name}> {matchName} </Text>
+          </View>
+
+          <Text style={styles.itemText}>
+            Description:{"\b\n"}
+            {matchDescription} {"\b\n\n"}
+            E-mail your match to arrange a meet up time and location!{"\b\n"}
+            Email: {"\b"} {matchEmail}
+          </Text>
+    
+
+  
+
+          <Text style={styles.itemText}>
+          {"\n"}
             Here are some suggested locations to meet up with your match.
             Suggestions are based on a central point between you and your match.
-            E-mail your match to arrange a meet up time and location!
           </Text>
           <FlatList
             data={suggestedLocations}
             renderItem={({ item }) => (
               <View>
                 <Text style={styles.itemText}>
-                  Name: {item.name}
+                  {item.name}
                   {"\n"}
                   Rating: {item.rating}
                   {"\n"}
@@ -152,49 +177,38 @@ export default class SuggestionScreen extends React.Component {
                 </Text>
               </View>
             )}
-            keyExtractor={item => item.name}
+            keyExtractor={item => item.id}
           />
         </View>
-      </View>
+
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  container:{
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
   },
-  itemText: {
-    backgroundColor: "#E3E4E5",
-    paddingLeft: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-    marginTop: 0,
-    marginBottom: 0,
-    marginHorizontal: 16,
-    color: "#013670"
+  name:{
+    fontWeight:"100",
+    fontSize:30,
+    marginVertical:15,
   },
-  itemImage: {
-    padding: 80,
-    marginBottom: 0,
-    marginHorizontal: 16,
-    height: 300
+  pic_name:{
+    flexDirection:"row",
+    marginTop:50,
+    marginBottom:20
   },
-  bottom_margin: {
-    marginTop: 10,
-    padding: 6
+  back:{
+    position:"absolute",
+    top:60,
+    left:10
   },
-  title: {
-    fontSize: 22,
-    textAlign: "center",
-    backgroundColor: "#E3E4E5",
-    paddingLeft: 10,
-    paddingTop: 10,
-    paddingBottom: 5,
-    marginTop: 0,
-    marginBottom: 0,
-    marginHorizontal: 16,
-    marginTop: 10,
-    color: "#013670"
+  itemText:{
+    marginHorizontal:18,
+    marginVertical:5
   }
 });

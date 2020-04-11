@@ -1,14 +1,13 @@
 import React from "react";
 import {
-  Button,
   View,
-  Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
-  Alert
+  Alert,
+  Image
 } from "react-native";
 import * as Permissions from "expo-permissions";
+import { Button } from 'react-native-elements';
 
 import Firebase from "../config/Firebase";
 
@@ -52,6 +51,8 @@ export default class LoginScreen extends React.Component {
   }
 
   handleLogin = () => {
+
+    const { email, password, locationCoordinates } = this.state;
     if (
       this.state.email == "" ||
       this.state.password == "" ||
@@ -60,56 +61,66 @@ export default class LoginScreen extends React.Component {
       Alert.alert(
         "Uh oh.",
         "Looks like your e-mail or password is incorrect",
-        { text: "Try Again!", onPress: () => console.log("Try Again!") },
+        [{ text: "Try Again!", onPress: () => console.log("Try Again!") }],
         { cancelable: false }
       );
     } else {
-      Firebase.auth()
-        .signInWithEmailAndPassword(this.state.email, this.state.password)
-        .then(() => this.props.navigation.navigate("Profile"))
-        .catch(error => {
-          console.log(error);
-          Alert.alert(
-            "Uh oh.",
-            "Looks like your e-mail or password is incorrect",
-            { text: "Try Again!", onPress: () => console.log("Try Again!") },
-            { cancelable: false }
-          );
-        });
-      let updatedLocation = {
-        locationCoordinates: this.state.locationCoordinates
-      };
-      Firebase.firestore()
-        .collection("users")
-        .doc(this.state.email)
-        .update(updatedLocation);
-    }
+
+    Firebase.auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => this.props.navigation.navigate("Profile"))
+      .catch(error => {
+        console.log(error);
+        Alert.alert(
+          "Uh oh.",
+          "Looks like your e-mail or password is incorrect",
+          [{ text: "Try Again!", onPress: () => console.log("Try Again!") }],
+          { cancelable: false }
+        );
+      });
+
+    let updatedLocation = {
+      locationCoordinates: locationCoordinates
+    };
+    Firebase.firestore()
+      .collection("users")
+      .doc(email)
+      .update(updatedLocation);
+  }
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.inputBox}
-          value={this.state.email}
-          onChangeText={email => this.setState({ email })}
-          placeholder="Email"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.inputBox}
-          value={this.state.password}
-          onChangeText={password => this.setState({ password })}
-          placeholder="Password"
-          secureTextEntry={true}
-        />
-        <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <Button
-          title="Don't have an account yet? Sign up"
-          onPress={() => this.props.navigation.navigate("Register")}
-        />
+        <Image style={styles.logo} source={require('../assets/logo.jpg')}/>
+        <View style={styles.content}>
+          <TextInput
+            style={styles.inputBox}
+            value={this.state.email}
+            onChangeText={email => this.setState({ email })}
+            placeholder="Email"
+            autoCapitalize="none"
+          />
+          <TextInput
+            style={styles.inputBox}
+            value={this.state.password}
+            onChangeText={password => this.setState({ password })}
+            placeholder="Password"
+            secureTextEntry={true}
+          />
+          <Button 
+            buttonStyle={styles.button} 
+            title="Login"
+            type="solid"
+            onPress={this.handleLogin}
+
+          />
+          <Button
+            title="Don't have an account yet? Sign up"
+            type="clear"
+            onPress={() => this.props.navigation.navigate("Register")}
+          />
+        </View>
       </View>
     );
   }
@@ -136,18 +147,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingVertical: 5,
     alignItems: "center",
-    backgroundColor: "#F6820D",
-    borderColor: "#F6820D",
-    borderWidth: 1,
     borderRadius: 5,
     width: 200
   },
-  buttonText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff"
+  logo:{
+    width:"80%",
+    height: 80,
+    top:"20%",
+    position:"absolute"
   },
-  buttonSignup: {
-    fontSize: 12
+  content:{
+    backgroundColor:"#fff",
+    width:"100%",
+    alignItems:"center",
+    position:"absolute",
+    bottom:"25%"
   }
 });

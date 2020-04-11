@@ -28,41 +28,44 @@ const StackNavigator = createStackNavigator(
     Home: {
       screen: HomeScreen,
       navigationOptions: {
-        header: null
+        headerShown: false
       }
     },
     Login: {
       screen: LoginScreen,
       navigationOptions: {
-        header: null
+      headerShown: false      
       }
     },
     Register: {
       screen: RegisterScreen,
       navigationOptions: {
-        header: null
+      headerShown: false      
       }
     },
     Profile: {
       screen: ProfileScreen,
       navigationOptions: {
-        header: null
+      headerShown: false      
       }
     },
     Match: {
       screen: MatchScreen,
       navigationOptions: {
-        header: null
+      headerShown: false      
       }
     },
     Chat: {
       screen: ChatScreen,
       navigationOptions: {
-        header: null
+      headerShown: false      
       }
     },
     "Meet Up": {
-      screen: SuggestionScreen
+      screen: SuggestionScreen,
+      navigationOptions: {
+      headerShown: false      
+      }
     }
   },
   {
