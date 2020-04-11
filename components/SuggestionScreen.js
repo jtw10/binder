@@ -94,7 +94,7 @@ export default class SuggestionScreen extends React.Component {
     if (midpoint != "") {
       fetch(
         "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" +
-          "key=AIzaSyCIF6EknD6lPU8XAywcFE6McHPGNr70ur4" +
+          "key=[YOUR GOOGLE PLACES API KEY]" +
           "&location=" +
           midpoint.latitude +
           "," +
