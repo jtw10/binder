@@ -15,7 +15,7 @@
     "expo": "~36.0.0",
     "expo-image-picker": "~8.0.1",
     "firebase": "^7.11.0",
-    "firebase-admin": "^8.10.0",
+    "firebase-admin": "^11.4.1",
     "geolib": "^3.2.1",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
